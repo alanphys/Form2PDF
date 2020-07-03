@@ -531,7 +531,7 @@ if cMemo.Visible then
       begin
       APage.WriteText(DX,DY,cMemo.Lines[I]);
       DY := DY + fSize;
-      if (DY > APage.Paper.Printable.B) or ((DY > MT + cMemo.Top + cMemo.Height) and fp) then
+      if (DY > APage.Paper.H - MT) or ((DY > MT + cMemo.Top + cMemo.Height) and fp) then
          begin
          DrawVarBorder(cMemo,APage,DX,DY,ML,MT);
          APage := SetupPage(cMemo,FDoc,ML,MT);
@@ -563,7 +563,7 @@ if cLstBx.Visible then
       begin
       APage.WriteText(DX,DY,cLstBx.Items[I]);
       DY := DY + fSize;
-      if (DY > APage.Paper.Printable.B) or ((DY > MT + cLstBx.Top + cLstBx.Height) and fp) then
+      if (DY > APage.Paper.H - MT) or ((DY > MT + cLstBx.Top + cLstBx.Height) and fp) then
          begin
          DrawVarBorder(cLstBx,APage,DX,DY,ML,MT);
          APage := SetupPage(cLstBx,FDoc,ML,MT);
@@ -606,7 +606,7 @@ if cStrGrd.Visible then
          end;
       DX := ML + cStrGrd.Left + 2;
       DY := DY + cStrGrd.RowHeights[I];
-      if (DY > APage.Paper.Printable.B) or ((DY > MT + cStrGrd.Top + cStrGrd.Height) and fp) then
+      if (DY > APage.Paper.H - MT) or ((DY > MT + cStrGrd.Top + cStrGrd.Height) and fp) then
          begin
          DrawVarBorder(cStrGrd,APage,DX,DY,ML,MT);
          APage := SetupPage(cStrGrd,FDoc,ML,MT);
@@ -653,7 +653,7 @@ if cValueList.Visible then
       AValue := cValueList.Cells[1,I];
       APage.WriteText(DX,DY,Akey + ' = ' + AValue);
       DY := DY + fSize;
-      if (DY > APage.Paper.Printable.B) or ((DY > MT + cValueList.Top + cValueList.Height) and fp) then
+      if (DY > APage.Paper.H - MT) or ((DY > MT + cValueList.Top + cValueList.Height) and fp) then
          begin
          DrawVarBorder(cValueList,APage,DX,DY,ML,MT);
          APage := SetupPage(cValueList,FDoc,ML,MT);
