@@ -7,7 +7,7 @@ uses
    cthreads,
    {$ENDIF}{$ENDIF}
    Interfaces, // this includes the LCL widgetset
-   Forms, tachartlazaruspkg, lazcontrols, f2pdfexunit
+   Forms, tachartlazaruspkg, lazcontrols, printer4lazarus, f2pdfexunit
    {$IFDEF DEBUG}
    , SysUtils              //delete SysUtils if not using heaptrc
    {$ENDIF}

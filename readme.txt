@@ -39,15 +39,30 @@ TRadioGroup
 TCheckGroup
 
 4) Usage
-To use copy form2pdf.pas into your source directory and include Form2PDF in your uses clause. Any visual control can be passed as a parent eg. TTabSheet or TForm. For example:
+To use copy form2pdf.pas into your source directory and include Form2PDF in your uses clause. Any visual control can be passed as a parent eg. TTabSheet or TForm.
 
-FormToPDF(PageControl.ActivePage,FileName);
+FormToPDF 
+initialise FDoc and check if fonts are available
+
+FormToPDF(AControl: TControl)
+parse controls and append pages to Fdoc
+
+FormToPDF(FileName:string)
+use to save FDoc to PDF and reset FDoc
+
+FormToPDF(AControl:TControl; FileName:string) 
+parse controls and save and close Fdoc
 
 5) History
 26/6/2020 Initial commit.
+3/7/2020  Fix bottom margin pagination.
+5/07/2020 (TvS):moved initialization of FormToPDF to initalization part of unit
+6/7/2020  changed FormToPDF to function to return error code
+          added control and filename checks
+8/7/2020  add functionality to append pages to document, FDoc now global}
 
 6) To Do
-Implement word wrapping on TMemo
+Implement word wrapping on TMemo (seems to be OK for Windows)
 Text alignment on TEdit, TSpinEdit, TFloatSpinEdit, TSpinEditEx and TFloatSpinEditEx.
 Add separate header margin
 Implement system fonts

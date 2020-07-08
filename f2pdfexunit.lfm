@@ -1,60 +1,60 @@
 object F2PDFExForm: TF2PDFExForm
   Left = 462
-  Height = 424
+  Height = 420
   Top = 181
-  Width = 593
+  Width = 587
   Caption = 'Form to PDF Example'
-  ClientHeight = 402
-  ClientWidth = 593
+  ClientHeight = 398
+  ClientWidth = 587
+  DesignTimePPI = 95
   Menu = MainMenu
   OnCreate = FormCreate
   LCLVersion = '2.0.8.0'
   object PageControl1: TPageControl
     Left = 0
-    Height = 402
+    Height = 376
     Top = 0
-    Width = 593
+    Width = 587
     ActivePage = TabSheet9
     Align = alClient
     ParentFont = False
     TabIndex = 8
     TabOrder = 0
-    OnChange = PageControl1Change
     object TabSheet1: TTabSheet
-      Caption = 'Text'
-      ClientHeight = 368
-      ClientWidth = 589
+      Caption = 'Text 1'
+      ClientHeight = 345
+      ClientWidth = 583
       ParentFont = False
       object Image: TImage
-        Left = 49
-        Height = 169
+        Left = 48
+        Height = 167
         Top = 32
-        Width = 184
+        Width = 182
         Stretch = True
       end
       object Shape1: TShape
-        Left = 49
+        Left = 48
         Height = 1
-        Top = 280
-        Width = 201
+        Top = 277
+        Width = 199
       end
       object Shape2: TShape
-        Left = 49
+        Left = 48
         Height = 1
-        Top = 344
-        Width = 201
+        Top = 340
+        Width = 199
       end
       object Label1: TLabel
-        Left = 56
+        Left = 55
         Height = 17
-        Top = 304
+        Top = 301
         Width = 186
         Caption = 'This is an example PDF form'
         ParentColor = False
         ParentFont = False
       end
       object Label12: TLabel
-        Left = 372
+        Left = 368
         Height = 8
         Top = 32
         Width = 21
@@ -64,9 +64,9 @@ object F2PDFExForm: TF2PDFExForm
         ParentFont = False
       end
       object Label13: TLabel
-        Left = 368
+        Left = 364
         Height = 13
-        Top = 66
+        Top = 65
         Width = 28
         Caption = 'Small'
         Font.Color = clRed
@@ -75,9 +75,9 @@ object F2PDFExForm: TF2PDFExForm
         ParentFont = False
       end
       object Label14: TLabel
-        Left = 359
+        Left = 355
         Height = 15
-        Top = 110
+        Top = 109
         Width = 48
         Caption = 'Medium'
         Font.Color = clGreen
@@ -86,9 +86,9 @@ object F2PDFExForm: TF2PDFExForm
         ParentFont = False
       end
       object Label15: TLabel
-        Left = 369
+        Left = 365
         Height = 19
-        Top = 155
+        Top = 153
         Width = 26
         Caption = 'Big'
         Font.Color = clBlue
@@ -97,9 +97,9 @@ object F2PDFExForm: TF2PDFExForm
         ParentFont = False
       end
       object Label16: TLabel
-        Left = 344
+        Left = 340
         Height = 30
-        Top = 203
+        Top = 201
         Width = 83
         Caption = 'Bigger'
         Font.Color = clYellow
@@ -108,9 +108,9 @@ object F2PDFExForm: TF2PDFExForm
         ParentFont = False
       end
       object Label17: TLabel
-        Left = 348
+        Left = 344
         Height = 38
-        Top = 261
+        Top = 258
         Width = 71
         Caption = 'Best'
         Font.Color = clNavy
@@ -121,14 +121,14 @@ object F2PDFExForm: TF2PDFExForm
       object Edit1: TEdit
         Left = 47
         Height = 25
-        Top = 229
-        Width = 227
+        Top = 227
+        Width = 225
         ParentFont = False
         TabOrder = 0
         Text = 'Write your text here'
       end
       object StaticText1: TStaticText
-        Left = 461
+        Left = 456
         Height = 38
         Top = 16
         Width = 71
@@ -139,9 +139,9 @@ object F2PDFExForm: TF2PDFExForm
         TabOrder = 1
       end
       object StaticText2: TStaticText
-        Left = 457
+        Left = 452
         Height = 30
-        Top = 84
+        Top = 83
         Width = 79
         AutoSize = True
         Caption = 'Better'
@@ -150,9 +150,9 @@ object F2PDFExForm: TF2PDFExForm
         TabOrder = 2
       end
       object StaticText3: TStaticText
-        Left = 485
+        Left = 480
         Height = 17
-        Top = 143
+        Top = 142
         Width = 23
         AutoSize = True
         Caption = 'Big'
@@ -161,9 +161,9 @@ object F2PDFExForm: TF2PDFExForm
         TabOrder = 3
       end
       object StaticText4: TStaticText
-        Left = 472
+        Left = 467
         Height = 15
-        Top = 191
+        Top = 189
         Width = 48
         AutoSize = True
         Caption = 'Medium'
@@ -172,9 +172,9 @@ object F2PDFExForm: TF2PDFExForm
         TabOrder = 4
       end
       object StaticText5: TStaticText
-        Left = 482
+        Left = 477
         Height = 13
-        Top = 236
+        Top = 234
         Width = 28
         AutoSize = True
         Caption = 'Small'
@@ -183,9 +183,9 @@ object F2PDFExForm: TF2PDFExForm
         TabOrder = 5
       end
       object StaticText6: TStaticText
-        Left = 486
+        Left = 481
         Height = 8
-        Top = 279
+        Top = 276
         Width = 21
         AutoSize = True
         Caption = 'Minute'
@@ -195,14 +195,14 @@ object F2PDFExForm: TF2PDFExForm
       end
     end
     object TabSheet2: TTabSheet
-      Caption = 'Shapes 1'
-      ClientHeight = 367
+      Caption = 'Shapes 2'
+      ClientHeight = 345
       ClientWidth = 583
       ParentFont = False
       object Label2: TLabel
-        Left = 184
+        Left = 182
         Height = 17
-        Top = 320
+        Top = 317
         Width = 214
         Caption = 'Shapes lines and colors example'
         ParentColor = False
@@ -210,137 +210,137 @@ object F2PDFExForm: TF2PDFExForm
       end
       object Shape3: TShape
         Left = 40
-        Height = 80
+        Height = 79
         Top = 32
-        Width = 153
+        Width = 151
         Brush.Color = clRed
       end
       object Shape4: TShape
-        Left = 300
-        Height = 80
+        Left = 297
+        Height = 79
         Top = 31
-        Width = 153
+        Width = 151
         Brush.Style = bsClear
         Pen.Color = clRed
       end
       object Shape5: TShape
-        Left = 329
-        Height = 80
-        Top = 85
-        Width = 153
+        Left = 326
+        Height = 79
+        Top = 84
+        Width = 151
         Brush.Style = bsClear
         Pen.Color = clBlue
         Pen.Style = psDash
       end
       object Shape6: TShape
-        Left = 358
-        Height = 80
-        Top = 139
-        Width = 153
+        Left = 354
+        Height = 79
+        Top = 138
+        Width = 151
         Brush.Style = bsClear
         Pen.Color = clGreen
         Pen.Style = psDashDot
       end
       object Shape7: TShape
-        Left = 387
-        Height = 80
-        Top = 193
-        Width = 153
+        Left = 383
+        Height = 79
+        Top = 191
+        Width = 151
         Brush.Style = bsClear
         Pen.Style = psDashDotDot
       end
       object Shape8: TShape
-        Left = 416
-        Height = 80
-        Top = 247
-        Width = 153
+        Left = 412
+        Height = 79
+        Top = 244
+        Width = 151
         Brush.Style = bsClear
         Pen.Style = psDot
       end
       object Shape9: TShape
-        Left = 64
-        Height = 80
-        Top = 97
-        Width = 153
+        Left = 63
+        Height = 79
+        Top = 96
+        Width = 151
         Brush.Color = clBlue
         Pen.Width = 2
       end
       object Shape10: TShape
-        Left = 88
-        Height = 80
-        Top = 162
-        Width = 153
+        Left = 87
+        Height = 79
+        Top = 160
+        Width = 151
         Brush.Color = clGreen
         Pen.Width = 4
       end
       object Shape11: TShape
-        Left = 112
-        Height = 80
-        Top = 227
-        Width = 153
+        Left = 111
+        Height = 79
+        Top = 225
+        Width = 151
         Pen.Width = 8
       end
     end
     object TabSheet4: TTabSheet
-      Caption = 'Shapes 2'
-      ClientHeight = 377
+      Caption = 'Shapes 3'
+      ClientHeight = 344
       ClientWidth = 583
       ParentFont = False
       object Shape15: TShape
         Left = 16
-        Height = 304
+        Height = 301
         Top = 8
-        Width = 490
+        Width = 485
         Brush.Style = bsClear
         Shape = stRoundRect
       end
       object Shape12: TShape
-        Left = 64
-        Height = 134
+        Left = 63
+        Height = 133
         Top = 42
-        Width = 194
+        Width = 192
         Shape = stRoundRect
       end
       object Label18: TLabel
-        Left = 198
+        Left = 196
         Height = 17
-        Top = 320
+        Top = 317
         Width = 109
         Caption = 'Different Shapes'
         ParentColor = False
         ParentFont = False
       end
       object Shape13: TShape
-        Left = 136
-        Height = 118
-        Top = 112
-        Width = 193
+        Left = 135
+        Height = 117
+        Top = 111
+        Width = 191
         Shape = stEllipse
       end
       object Shape14: TShape
-        Left = 272
-        Height = 120
-        Top = 160
-        Width = 120
+        Left = 269
+        Height = 119
+        Top = 158
+        Width = 119
         Shape = stEllipse
       end
       object Shape16: TShape
-        Left = 344
+        Left = 340
         Height = 32
-        Top = 64
+        Top = 63
         Width = 40
         Shape = stRoundRect
       end
     end
     object TabSheet3: TTabSheet
-      Caption = 'GroupBox'
-      ClientHeight = 368
-      ClientWidth = 589
+      Caption = 'GroupBox 4'
+      ClientHeight = 345
+      ClientWidth = 583
       ParentFont = False
       object Label3: TLabel
-        Left = 288
+        Left = 285
         Height = 17
-        Top = 339
+        Top = 335
         Width = 157
         Caption = 'Grouped items example'
         ParentColor = False
@@ -348,13 +348,13 @@ object F2PDFExForm: TF2PDFExForm
       end
       object GroupBox1: TGroupBox
         Left = 0
-        Height = 368
+        Height = 344
         Top = 0
-        Width = 185
+        Width = 183
         Align = alLeft
         Caption = 'GroupBox1'
-        ClientHeight = 342
-        ClientWidth = 179
+        ClientHeight = 318
+        ClientWidth = 177
         ParentFont = False
         TabOrder = 0
         object Label4: TLabel
@@ -369,7 +369,7 @@ object F2PDFExForm: TF2PDFExForm
         object Label5: TLabel
           Left = 16
           Height = 17
-          Top = 56
+          Top = 55
           Width = 40
           Caption = 'Line 2'
           ParentColor = False
@@ -378,7 +378,7 @@ object F2PDFExForm: TF2PDFExForm
         object Label6: TLabel
           Left = 16
           Height = 17
-          Top = 136
+          Top = 135
           Width = 40
           Caption = 'Line 4'
           ParentColor = False
@@ -387,7 +387,7 @@ object F2PDFExForm: TF2PDFExForm
         object Label7: TLabel
           Left = 16
           Height = 17
-          Top = 96
+          Top = 95
           Width = 40
           Caption = 'Line 3'
           ParentColor = False
@@ -396,7 +396,7 @@ object F2PDFExForm: TF2PDFExForm
         object Label8: TLabel
           Left = 16
           Height = 17
-          Top = 176
+          Top = 174
           Width = 40
           Caption = 'Line 5'
           ParentColor = False
@@ -405,7 +405,7 @@ object F2PDFExForm: TF2PDFExForm
         object Label9: TLabel
           Left = 16
           Height = 17
-          Top = 216
+          Top = 214
           Width = 40
           Caption = 'Line 6'
           ParentColor = False
@@ -414,7 +414,7 @@ object F2PDFExForm: TF2PDFExForm
         object Label10: TLabel
           Left = 16
           Height = 17
-          Top = 256
+          Top = 253
           Width = 40
           Caption = 'Line 7'
           ParentColor = False
@@ -423,7 +423,7 @@ object F2PDFExForm: TF2PDFExForm
         object Label11: TLabel
           Left = 16
           Height = 17
-          Top = 296
+          Top = 293
           Width = 40
           Caption = 'Line 8'
           ParentColor = False
@@ -431,10 +431,10 @@ object F2PDFExForm: TF2PDFExForm
         end
       end
       object RadioGroup1: TRadioGroup
-        Left = 192
-        Height = 174
+        Left = 190
+        Height = 172
         Top = 0
-        Width = 392
+        Width = 388
         AutoFill = True
         Caption = 'RadioGroup1'
         ChildSizing.LeftRightSpacing = 6
@@ -444,15 +444,15 @@ object F2PDFExForm: TF2PDFExForm
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 1
-        ClientHeight = 148
-        ClientWidth = 386
+        ClientHeight = 146
+        ClientWidth = 382
         ParentFont = False
         TabOrder = 1
         object RadioButton5: TRadioButton
           Left = 6
           Height = 37
           Top = 0
-          Width = 374
+          Width = 370
           Caption = 'RadioButton5'
           ParentFont = False
           TabOrder = 0
@@ -461,7 +461,7 @@ object F2PDFExForm: TF2PDFExForm
           Left = 6
           Height = 37
           Top = 37
-          Width = 374
+          Width = 370
           Caption = 'RadioButton6'
           ParentFont = False
           TabOrder = 1
@@ -470,26 +470,26 @@ object F2PDFExForm: TF2PDFExForm
           Left = 6
           Height = 37
           Top = 74
-          Width = 374
+          Width = 370
           Caption = 'RadioButton7'
           ParentFont = False
           TabOrder = 2
         end
         object RadioButton8: TRadioButton
           Left = 6
-          Height = 37
+          Height = 35
           Top = 111
-          Width = 374
+          Width = 370
           Caption = 'RadioButton8'
           ParentFont = False
           TabOrder = 3
         end
       end
       object CheckGroup1: TCheckGroup
-        Left = 192
-        Height = 152
-        Top = 176
-        Width = 393
+        Left = 190
+        Height = 150
+        Top = 174
+        Width = 389
         AutoFill = True
         Caption = 'CheckGroup1'
         ChildSizing.LeftRightSpacing = 6
@@ -500,15 +500,15 @@ object F2PDFExForm: TF2PDFExForm
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 1
-        ClientHeight = 126
-        ClientWidth = 387
+        ClientHeight = 124
+        ClientWidth = 383
         ParentFont = False
         TabOrder = 2
         object CheckBox5: TCheckBox
           Left = 6
           Height = 38
           Top = 6
-          Width = 375
+          Width = 371
           Caption = 'CheckBox5'
           ParentFont = False
           TabOrder = 0
@@ -517,16 +517,16 @@ object F2PDFExForm: TF2PDFExForm
           Left = 6
           Height = 38
           Top = 44
-          Width = 375
+          Width = 371
           Caption = 'CheckBox6'
           ParentFont = False
           TabOrder = 1
         end
         object CheckBox7: TCheckBox
           Left = 6
-          Height = 38
+          Height = 36
           Top = 82
-          Width = 375
+          Width = 371
           Caption = 'CheckBox7'
           ParentFont = False
           TabOrder = 2
@@ -534,14 +534,14 @@ object F2PDFExForm: TF2PDFExForm
       end
     end
     object TabSheet5: TTabSheet
-      Caption = 'CheckBoxes'
-      ClientHeight = 373
+      Caption = 'CheckBoxes 5'
+      ClientHeight = 345
       ClientWidth = 583
       ParentFont = False
       object Label19: TLabel
-        Left = 219
+        Left = 217
         Height = 17
-        Top = 332
+        Top = 329
         Width = 197
         Caption = 'Check and Radio box example'
         ParentColor = False
@@ -549,11 +549,11 @@ object F2PDFExForm: TF2PDFExForm
       end
       object Panel1: TPanel
         Left = 8
-        Height = 176
+        Height = 174
         Top = 0
-        Width = 286
-        ClientHeight = 176
-        ClientWidth = 286
+        Width = 283
+        ClientHeight = 174
+        ClientWidth = 283
         Color = clMoneyGreen
         ParentColor = False
         ParentFont = False
@@ -572,7 +572,7 @@ object F2PDFExForm: TF2PDFExForm
         object CheckBox2: TCheckBox
           Left = 17
           Height = 23
-          Top = 57
+          Top = 56
           Width = 96
           Caption = 'CheckBox2'
           ParentFont = False
@@ -581,7 +581,7 @@ object F2PDFExForm: TF2PDFExForm
         object CheckBox3: TCheckBox
           Left = 17
           Height = 23
-          Top = 98
+          Top = 97
           Width = 96
           Caption = 'CheckBox3'
           ParentFont = False
@@ -590,7 +590,7 @@ object F2PDFExForm: TF2PDFExForm
         object CheckBox4: TCheckBox
           Left = 17
           Height = 23
-          Top = 139
+          Top = 138
           Width = 96
           Caption = 'CheckBox4'
           ParentFont = False
@@ -598,12 +598,12 @@ object F2PDFExForm: TF2PDFExForm
         end
       end
       object Panel2: TPanel
-        Left = 296
-        Height = 176
+        Left = 293
+        Height = 174
         Top = 0
-        Width = 288
-        ClientHeight = 176
-        ClientWidth = 288
+        Width = 285
+        ClientHeight = 174
+        ClientWidth = 285
         Color = clSkyBlue
         ParentColor = False
         ParentFont = False
@@ -620,7 +620,7 @@ object F2PDFExForm: TF2PDFExForm
         object RadioButton2: TRadioButton
           Left = 37
           Height = 23
-          Top = 58
+          Top = 57
           Width = 112
           Caption = 'RadioButton2'
           ParentFont = False
@@ -629,7 +629,7 @@ object F2PDFExForm: TF2PDFExForm
         object RadioButton3: TRadioButton
           Left = 37
           Height = 23
-          Top = 93
+          Top = 92
           Width = 112
           Caption = 'RadioButton3'
           ParentFont = False
@@ -638,7 +638,7 @@ object F2PDFExForm: TF2PDFExForm
         object RadioButton4: TRadioButton
           Left = 37
           Height = 23
-          Top = 128
+          Top = 127
           Width = 112
           Caption = 'RadioButton4'
           ParentFont = False
@@ -647,22 +647,22 @@ object F2PDFExForm: TF2PDFExForm
       end
       object Panel3: TPanel
         Left = 9
-        Height = 76
-        Top = 184
-        Width = 570
+        Height = 75
+        Top = 182
+        Width = 564
         Caption = 'Panel3'
         ParentFont = False
         TabOrder = 2
       end
     end
     object TabSheet6: TTabSheet
-      Caption = 'Memo'
-      ClientHeight = 377
+      Caption = 'Memo 6'
+      ClientHeight = 345
       ClientWidth = 583
       ParentFont = False
       object Memo1: TMemo
         Left = 0
-        Height = 377
+        Height = 344
         Top = 0
         Width = 583
         Align = alClient
@@ -715,15 +715,15 @@ object F2PDFExForm: TF2PDFExForm
       end
     end
     object TabSheet7: TTabSheet
-      Caption = 'TeeChart'
-      ClientHeight = 435
-      ClientWidth = 660
+      Caption = 'TeeChart 7'
+      ClientHeight = 345
+      ClientWidth = 583
       ParentFont = False
       object Chart1: TChart
         Left = 0
-        Height = 435
+        Height = 344
         Top = 0
-        Width = 660
+        Width = 583
         AxisList = <        
           item
             Marks.LabelBrush.Style = bsClear
@@ -763,31 +763,27 @@ object F2PDFExForm: TF2PDFExForm
       end
     end
     object TabSheet8: TTabSheet
-      Caption = 'StringGrid'
-      ClientHeight = 368
-      ClientWidth = 589
+      Caption = 'StringGrid 8'
+      ClientHeight = 345
+      ClientWidth = 583
       ParentFont = False
       object StringGrid2: TStringGrid
         Left = 0
-        Height = 143
+        Height = 142
         Top = 0
-        Width = 280
+        Width = 277
         ColCount = 4
         Columns = <        
           item
-            MaxSize = 202
             Title.Caption = 'First col'
           end        
           item
-            MaxSize = 202
             Title.Caption = 'Second col'
           end        
           item
-            MaxSize = 202
             Title.Caption = 'Third col'
           end        
           item
-            MaxSize = 202
             Title.Caption = 'Fourth col'
           end>
         FixedCols = 0
@@ -796,30 +792,34 @@ object F2PDFExForm: TF2PDFExForm
         TabOrder = 0
       end
       object Label20: TLabel
-        Left = 72
+        Left = 71
         Height = 17
-        Top = 216
+        Top = 214
         Width = 131
         Caption = 'String Grid example'
         ParentColor = False
         ParentFont = False
       end
       object StringGrid1: TStringGrid
-        Left = 296
-        Height = 321
+        Left = 293
+        Height = 318
         Top = 0
-        Width = 280
+        Width = 277
         Columns = <        
           item
+            MaxSize = 198
             Title.Caption = 'Col A'
           end        
           item
+            MaxSize = 198
             Title.Caption = 'Col B'
           end        
           item
+            MaxSize = 198
             Title.Caption = 'Col C'
           end        
           item
+            MaxSize = 198
             Title.Caption = 'Col D'
           end>
         ParentFont = False
@@ -827,15 +827,15 @@ object F2PDFExForm: TF2PDFExForm
       end
     end
     object TabSheet9: TTabSheet
-      Caption = 'Data'
-      ClientHeight = 368
-      ClientWidth = 589
+      Caption = 'Data 9'
+      ClientHeight = 344
+      ClientWidth = 583
       ParentFont = False
       object ListBox1: TListBox
         Left = 37
-        Height = 91
+        Height = 90
         Top = 29
-        Width = 100
+        Width = 99
         Items.Strings = (
           'Item A'
           'Item B'
@@ -863,18 +863,18 @@ object F2PDFExForm: TF2PDFExForm
       end
       object SpinEdit1: TSpinEdit
         Left = 38
-        Height = 26
-        Top = 187
-        Width = 50
+        Height = 24
+        Top = 185
+        Width = 49
         ParentFont = False
         TabOrder = 1
         Value = 20
       end
       object FloatSpinEdit1: TFloatSpinEdit
         Left = 38
-        Height = 26
-        Top = 231
-        Width = 50
+        Height = 24
+        Top = 229
+        Width = 49
         MinValue = 0
         ParentFont = False
         TabOrder = 2
@@ -882,9 +882,9 @@ object F2PDFExForm: TF2PDFExForm
       end
       object FloatSpinEdit2: TFloatSpinEdit
         Left = 38
-        Height = 26
-        Top = 275
-        Width = 50
+        Height = 24
+        Top = 272
+        Width = 49
         MinValue = 0
         ParentFont = False
         ParentShowHint = False
@@ -894,18 +894,18 @@ object F2PDFExForm: TF2PDFExForm
       end
       object SpinEdit2: TSpinEdit
         Left = 38
-        Height = 26
-        Top = 143
-        Width = 50
+        Height = 24
+        Top = 142
+        Width = 49
         ParentFont = False
         TabOrder = 4
         Value = 10
       end
       object ComboBox1: TComboBox
-        Left = 166
+        Left = 164
         Height = 25
         Top = 16
-        Width = 156
+        Width = 154
         ItemHeight = 17
         Items.Strings = (
           'Item A'
@@ -930,30 +930,30 @@ object F2PDFExForm: TF2PDFExForm
         Text = 'Select Item'
       end
       object SpinEditEx1: TSpinEditEx
-        Left = 166
+        Left = 164
         Height = 25
-        Top = 53
-        Width = 103
+        Top = 52
+        Width = 102
         MaxLength = 0
         ParentFont = False
         TabOrder = 6
         Value = 15
       end
       object SpinEditEx2: TSpinEditEx
-        Left = 166
+        Left = 164
         Height = 25
-        Top = 102
-        Width = 103
+        Top = 101
+        Width = 102
         MaxLength = 0
         ParentFont = False
         TabOrder = 7
         Value = 5
       end
       object FloatSpinEditEx1: TFloatSpinEditEx
-        Left = 166
+        Left = 164
         Height = 25
-        Top = 151
-        Width = 103
+        Top = 149
+        Width = 102
         MaxLength = 0
         ParentFont = False
         TabOrder = 8
@@ -962,10 +962,10 @@ object F2PDFExForm: TF2PDFExForm
         Value = 6.67
       end
       object FloatSpinEditEx2: TFloatSpinEditEx
-        Left = 166
+        Left = 164
         Height = 25
-        Top = 200
-        Width = 103
+        Top = 198
+        Width = 102
         MaxLength = 0
         ParentFont = False
         TabOrder = 9
@@ -974,47 +974,50 @@ object F2PDFExForm: TF2PDFExForm
         Value = 3.33
       end
       object Label21: TLabel
-        Left = 215
+        Left = 213
         Height = 17
-        Top = 322
+        Top = 319
         Width = 128
         Caption = 'Data Entry Controls'
         ParentColor = False
         ParentFont = False
       end
       object FileNameEdit1: TFileNameEdit
-        Left = 137
+        Left = 136
         Height = 25
-        Top = 239
-        Width = 423
+        Top = 237
+        Width = 419
         FileName = 'FileNameEdit1'
         FilterIndex = 0
         HideDirectories = False
         ButtonWidth = 23
         NumGlyphs = 1
         MaxLength = 0
+        ParentFont = False
         TabOrder = 10
         Text = 'FileNameEdit1'
       end
       object DirectoryEdit1: TDirectoryEdit
-        Left = 137
+        Left = 136
         Height = 25
-        Top = 281
-        Width = 423
+        Top = 278
+        Width = 419
         Directory = 'DirectoryEdit1'
         ShowHidden = False
         ButtonWidth = 23
         NumGlyphs = 1
         MaxLength = 0
+        ParentFont = False
         TabOrder = 11
         Text = 'DirectoryEdit1'
       end
       object ValueListEditor1: TValueListEditor
-        Left = 352
-        Height = 209
+        Left = 348
+        Height = 207
         Top = 16
-        Width = 216
+        Width = 214
         FixedCols = 0
+        ParentFont = False
         RowCount = 12
         TabOrder = 12
         Strings.Strings = (
@@ -1031,17 +1034,19 @@ object F2PDFExForm: TF2PDFExForm
           'Key 11=110'
         )
         ColWidths = (
-          64
+          63
           136
         )
       end
     end
   end
-  object SaveDialog: TSaveDialog
-    DefaultExt = '.pdf'
-    Filter = 'PDF files|*.pdf|All files|*'
-    left = 536
-    top = 16
+  object StatusBar: TStatusBar
+    Left = 0
+    Height = 22
+    Top = 376
+    Width = 587
+    Panels = <>
+    ParentFont = False
   end
   object RandomChartSource1: TRandomChartSource
     PointsNumber = 10
@@ -1052,12 +1057,12 @@ object F2PDFExForm: TF2PDFExForm
     XMin = 0
     YMax = 10
     YMin = 0
-    left = 517
-    top = 323
+    left = 512
+    top = 320
   end
   object MainMenu: TMainMenu
     left = 16
-    top = 356
+    top = 352
     object miPrintAll: TMenuItem
       Caption = '&Print All'
       OnClick = miPrintAllClick
@@ -1065,6 +1070,10 @@ object F2PDFExForm: TF2PDFExForm
     object miPrintActive: TMenuItem
       Caption = 'Print &Active Page'
       OnClick = miPrintActiveClick
+    end
+    object miPrintSel: TMenuItem
+      Caption = 'Print &Selected'
+      OnClick = miPrintSelClick
     end
   end
 end

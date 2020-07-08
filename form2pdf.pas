@@ -8,7 +8,7 @@ This unit renders the text and image components of a form to a PDF using the
 fcl-pdf package. The object is not to provide a pixel by pixel representation of
 the form, but to record the text and image information. Multiline controls such
 as TStringGrid and TMemo are printed out in their entirety. the unit is
-modularised so new componenets can be added easily. Supported components are:
+modularised so new components can be added easily. Supported components are:
 TForm
 TLabel
 TStaticText
@@ -40,19 +40,31 @@ To use copy form2pdf.pas into your source directory and include Form2PDF in
 your uses clause. Any visual control can be passed as a parent eg. TTabControl.
 
 Licence: Apache v2.0
-}
+
+History
+26/6/2020 Initial commit.
+3/7/2020  Fix bottom margin pagination.
+5/07/2020 (TvS):moved initialization of FormToPDF to initalization part of unit
+6/7/2020  changed FormToPDF to function to return error code
+          added control and filename checks
+8/7/2020  add functionality to append pages to document, FDoc now global}
 
 interface
 
 uses
-   Classes, Forms, Graphics, Controls, SysUtils;
+   Classes, Forms, Graphics, Controls, SysUtils, fppdf;
 
-procedure FormToPDF(AControl:TControl; FileName:string);
+var FDoc       :TPDFDocument;  {declare FDOC global so it can be accessed by caller}
+
+function FormToPDF:integer;                     {initialise FDoc and check if fonts are available}
+function FormToPDF(AControl: TControl):integer; {parse controls and append pages to Fdoc}
+function FormToPDF(FileName:string):integer;    {use to save FDoc to PDF and reset FDoc}
+function FormToPDF(AControl:TControl; FileName:string):integer; {parse controls and save and close Fdoc}
 
 implementation
 
 uses StdCtrls, ExtCtrls, ComCtrls,TAGraph, Grids, Spin, SpinEx, EditBtn,ValEdit,
-     fppdf, fpparsettf, fpttf, intfgraphics;
+     fpparsettf, fpttf, intfgraphics;
 
 procedure RecurseControls(AControl:TControl; FDoc:TPDFDocument; Page:TPDFPage; ftText,ML,MT:integer); forward;
 procedure ParseControls(AControl:TControl; FDoc:TPDFDocument; Page:TPDFPage; ftText,ML,MT:integer); forward;
@@ -64,11 +76,14 @@ var FirstPage  :boolean;
 Page and Document set up
 ------------------------------------------------------------------------------}
 
-function SetupPage(AControl:TControl; Fdoc:TPDFDocument; ML,MT:integer):TPDFPage;
+function FontsAvailable: Boolean;
+begin
+Result:= (gTTFontCache.Count > 0);
+end;
+
+
+function SetupPage(AControl:TControl; FDoc:TPDFDocument; ML,MT:integer):TPDFPage;
 var APage      :TPDFPage;
-    APaper     :TPDFPaper;
-    DW,DH      :integer;
-    Aspect     :single;
 
 begin
 APage := FDoc.Pages.AddPage;
@@ -328,8 +343,7 @@ end;
 
 {TPanel}
 procedure PanelToPDF(cPanel:TPanel; FDoc:TPDFDocument; APage:TPDFPage; IDX,ML,MT:integer);
-var I,
-    DX,DY:integer;            {x and y pos to draw item}
+var I          :integer;
 begin
 if cPanel.Visible then
    begin
@@ -364,12 +378,16 @@ if cEdit.Visible then
    end;
 end;
 
+{Note: TspinEdit, TFloatSpinEdit, TSpinEditEx and TFloatSpinEditEx are programatically
+the same, but if the -CR compiler switch is set we can only typecast to the exact
+type. Base class of TSpinEditEx and TFloatSpinEditEx is not specialised so we
+cannot typecast to it.}
 
-{TSpinEdit, TFloatSpinEdit}
-procedure SpinEditToPDF(cSpinEd:TFloatSpinEdit; APage:TPDFPage; IDX,ML,MT:integer);
+{TCustomFloatSpinEdit}
+procedure CustomFloatSpinEditToPDF(cSpinEd:TCustomFloatSpinEdit; APage:TPDFPage; IDX,ML,MT:integer);
 var fSize,                     {font size}
     DX,DY,                     {x and y pos to draw item}
-    DW,DH,                     {height and width to draw item}
+    DH,                        {height to draw item}
     X1,X2,
     Y1,Y2      :integer;
 
@@ -402,11 +420,62 @@ if cSpinEd.Visible then
 end;
 
 
-{TSpinEditEx, TFloatSpinEditEx}
-procedure SpinEditExToPDF(cSpinEd:TFloatSpinEditEx; APage:TPDFPage; IDX,ML,MT:integer);
+{TSpinEdit}
+procedure SpinEditToPDF(cSpinEd:TSpinEdit; APage:TPDFPage; IDX,ML,MT:integer);
+begin
+CustomFloatSpinEditToPDF(TCustomFloatSpinEdit(cSpinEd),APage,IDX,ML,MT)
+end;
+
+
+{TFloatSpinEdit}
+procedure FloatSpinEditToPDF(cSpinEd:TFloatSpinEdit; APage:TPDFPage; IDX,ML,MT:integer);
+begin
+CustomFloatSpinEditToPDF(TCustomFloatSpinEdit(cSpinEd),APage,IDX,ML,MT)
+end;
+
+
+{TSpinEditEx}
+procedure SpinEditExToPDF(cSpinEd:TSpinEditEx; APage:TPDFPage; IDX,ML,MT:integer);
 var fSize,                     {font size}
     DX,DY,                     {x and y pos to draw item}
-    DW,DH,                     {height and width to draw item}
+    DH,                        {height to draw item}
+    X1,X2,
+    Y1,Y2      :integer;
+
+begin
+if cSpinEd.Visible then
+   begin
+   DrawFixedBorder(cSpinEd,APage,ML,MT);
+
+   {write edit caption}
+   fsize := SetControlFont(cSpinEd,APage,IDX);
+   DH := cSpinEd.Height;
+   DX := ML + cSpinEd.Left;
+   DY := MT + cSpinEd.Top + fSize + (DH - fSize) div 2;
+   APage.WriteText(DX + 2,DY,cSpinEd.Caption);
+
+   {draw up tick}
+   X1 := DX + cSpinEd.Width - DH div 2 + 2;
+   Y1 := MT + cSpinEd.Top + 2;
+   X2 := X1 + DH div 4 - 2;
+   Y2 := Y1 + DH div 3 - 2;
+   APage.DrawLine(X1,Y2,X2,Y1,1,true);
+   APage.DrawLine(X1 + DH div 4 - 2,Y1,X2 + DH div 4 - 2,Y2,1,true);
+
+   {draw down tick}
+   Y1 := MT + cSpinEd.Top +DH - 2;
+   Y2 := Y1 - DH div 3 + 2;
+   APage.DrawLine(X1,Y2,X2,Y1,1,true);
+   APage.DrawLine(X1 + DH div 4 - 2,Y1,X2 + DH div 4 - 2,Y2,1,true);
+   end;
+end;
+
+
+{TFloatSpinEditEx}
+procedure FloatSpinEditExToPDF(cSpinEd:TFloatSpinEditEx; APage:TPDFPage; IDX,ML,MT:integer);
+var fSize,                     {font size}
+    DX,DY,                     {x and y pos to draw item}
+    DH,                        {height to draw item}
     X1,X2,
     Y1,Y2      :integer;
 
@@ -582,8 +651,7 @@ end;
 procedure StringGridToPDF(cStrGrd:TStringGrid; FDoc:TPDFDocument; APage:TPDFPage; IDX,ML,MT:integer);
 var I,J,
     fSize,                     {font size}
-    DX,DY,                     {x and y pos to draw item}
-    DW,DH      :integer;       {height and width to draw item}
+    DX,DY      :integer;       {x and y pos to draw item}
     fp         :boolean;       {first page of control}
 
 begin
@@ -740,8 +808,7 @@ end;
 procedure RadioGroupToPDF(cRadioGrp:TRadioGroup; FDoc:TPDFDocument; APage:TPDFPage; IDX,ML,MT:integer);
 var I,
     fSize,                     {font size}
-    DX,DY,                     {x and y pos to draw item}
-    DW,DH      :integer;       {height and width to draw item}
+    DX,DY      :integer;       {x and y pos to draw item}
 begin
 if cRadioGrp.Visible then
    begin
@@ -766,8 +833,7 @@ end;
 procedure CheckGroupToPDF(cCheckGrp:TCheckGroup; FDoc:TPDFDocument; APage:TPDFPage; IDX,ML,MT:integer);
 var I,
     fSize,                     {font size}
-    DX,DY,                     {x and y pos to draw item}
-    DW,DH      :integer;       {height and width to draw item}
+    DX,DY      :integer;       {x and y pos to draw item}
 begin
 if cCheckGrp.Visible then
    begin
@@ -817,17 +883,17 @@ if AControl is TStaticText then           {TStaticText}
 if AControl is TEdit then                 {TEdit}
    EditToPDF(TEdit(AControl),Page,ftText,ML,MT);
 
-if AControl is TSpinEdit then             {TSpinEdit}
-   SpinEditToPDF(TFloatSpinEdit(AControl),Page,ftText,ML,MT);
-
 if AControl is TFloatSpinEdit then        {TFloatSpinEdit}
-   SpinEditToPDF(TFloatSpinEdit(AControl),Page,ftText,ML,MT);
+   FloatSpinEditToPDF(TFloatSpinEdit(AControl),Page,ftText,ML,MT);
+
+if AControl is TSpinEdit then             {TSpinEdit}
+   SpinEditToPDF(TSpinEdit(AControl),Page,ftText,ML,MT);
 
 if AControl is TSpinEditEx then           {TSpinEditEx}
-   SpinEditExToPDF(TFloatSpinEditEx(AControl),Page,ftText,ML,MT);
+   SpinEditExToPDF(TSpinEditEx(AControl),Page,ftText,ML,MT);
 
 if AControl is TFloatSpinEditEx then      {TFloatSpinEditEx}
-   SpinEditExToPDF(TFloatSpinEditEx(AControl),Page,ftText,ML,MT);
+   FloatSpinEditExToPDF(TFloatSpinEditEx(AControl),Page,ftText,ML,MT);
 
 if AControl is TDirectoryEdit then        {TDirectoryEdit}
    DirEditToPDF(TDirectoryEdit(AControl),Page,ftText,ML,MT);
@@ -890,7 +956,6 @@ procedure RecurseControls(AControl:TControl; FDoc:TPDFDocument; Page:TPDFPage; f
 Terrible programming but use exit to emulate caes and increase efficiency}
 var cForm      :TForm;
     cPageCtrl  :TPageControl;
-    cTabSht    :TTabSheet;
     I          :integer;
 begin
 if AControl is TForm then                 {TForm}
@@ -937,12 +1002,38 @@ if AControl is TCheckGroup then           {TCheckGroup}
 end;
 
 
-procedure FormToPDF(AControl: TControl; FileName:string);
+function FormToPDF:integer;
+{Use to check if FormToPDF is available. Resets FDoc.}
+begin
+FreeAndNil(FDoc);
+Result := FormToPDF(nil,'');
+end;
+
+
+function FormToPDF(AControl: TControl):integer;
+{Use to append pages to FDoc}
+begin
+Result := FormToPDF(AControl,'');
+end;
+
+
+function FormToPDF(FileName:string):integer;
+{Use to save FDoc to PDF and reset FDoc}
+begin
+Result := FormToPDF(nil,FileName);
+end;
+
+
+function FormToPDF(AControl: TControl; FileName:string):integer;
 {Note screen origin is top-left, pdf origin is bottom-left. We map the form to
 the page 1:1, but PDF is 72 dpi (Points) and screen is usually 96dpi so the
-form will be enlarged. }
-var FDoc       :TPDFDocument;
-    DW,DH,
+form will be enlarged. Returns number of objects printed if successful, error
+code otherwise. Error codes:
+ 0 initialisation OK, no objects printed, nil control or empty filename.
+-1 no fonts available.
+-2 could not create document}
+
+var DW,DH,
     MT,                        {margin top}
     ML,                        {margin left}
     ftTitle,                   {title font index}
@@ -952,70 +1043,94 @@ var FDoc       :TPDFDocument;
     Aspect     :single;        {control aspect ratio}
 
 begin
-{set margins}
-MT := 108;                       {1.5 inch}
-ML := 72;                       {1 inch}
+Result := -1;
+FirstPage := false;
 
+{Checks}
+if FontsAvailable then Result := 0;
+if (Result = 0) then
+   begin
+   {set margins}
+   MT := 108;                       {1.5 inch}
+   ML := 72;                       {1 inch}
+
+   if not Assigned(FDoc) then
+      begin
+      {Set up document}
+      try
+         FDoc := TPDFDocument.Create(Nil);
+      except
+         Result := -2;
+      end;
+      FDoc.Options := [poPageOriginAtTop];
+      FDoc.FontDirectory := 'fonts';
+      FDoc.DefaultUnitOfMeasure := uomPixels;
+      FDoc.StartDocument;
+      Section := FDoc.Sections.AddSection;
+      end;
+
+   {set up fonts}
+   {It is very difficult to get the system fonts. For now the user must copy
+   any fonts used in the form to the /fonts directory and specify them explicitly}
+   ftTitle := FDoc.Addfont('Helvetica');
+   ftText := FDoc.Addfont('FreeSans.ttf','Regular');
+
+   {if user has not already set info then set defaults}
+   if FDoc.Infos.Title <> '' then FDoc.Infos.Title := Application.Title;
+   if FDoc.Infos.Author <> '' then FDoc.Infos.Author := 'Form2PDF';
+   if FDoc.Infos.Producer <> '' then FDoc.Infos.Producer := 'fpGUI Toolkit 1.4.1';
+   if FDoc.Infos.ApplicationName <> '' then FDoc.Infos.ApplicationName := ApplicationName;
+   FDoc.Infos.CreationDate := Now;
+
+   if Assigned(AControl) then
+      begin
+      {get form aspect ratio}
+      DW := AControl.Width;
+      DH := AControl.Height;
+      Aspect := DW/DH;
+      if Aspect > 1 then
+         FDoc.DefaultOrientation := ppoLandscape
+        else
+         FDoc.DefaultOrientation := ppoPortrait;
+
+      {set paper size, smaller than A4 use A4 otherwise use custom as nothing larger}
+      CustomPaper.H := DH + 2*MT;
+      CustomPaper.W := DW + 2*ML;
+      CustomPaper.Printable.T := 10;
+      CustomPaper.Printable.L := 10;
+      CustomPaper.Printable.R := CustomPaper.W - 10;
+      CustomPaper.Printable.B := CustomPaper.H - 10;
+      if (DW > 842 - 2*ML) or (DH > 595 - 2*MT) then
+         FDoc.DefaultPaperType := ptCustom
+        else FDoc.DefaultPaperType := ptA4;
+
+      {Add first page}
+      Page := SetupPage(AControl,FDoc,ML,MT);
+      FirstPage := true;
+
+      RecurseControls(AControl,FDoc,Page,ftText,ML,MT);
+      end;
+
+   {Save the PDF}
+   if FileName <> '' then
+      begin
+      FDoc.SaveToFile(FileName);
+      Result := FDoc.ObjectCount;
+      FreeAndNil(FDoc);         {assume document is finished and dispose}
+      end;
+   end;
+end;
+
+
+initialization
+FDoc := nil;
 {add any extra fonts}
 gTTFontCache.SearchPath.Add(ExtractFilePath(Application.ExeName) + 'fonts');
 {gTTFontCache.ReadStandardFonts;}
 gTTFontCache.BuildFontCache;
 
-{Set up document}
-FDoc := TPDFDocument.Create(Nil);
-FDoc.Infos.Title := Application.Title;
-FDoc.Infos.Author := 'Alan Chamberlain';
-FDoc.Infos.Producer := 'fpGUI Toolkit 1.4.1';
-FDoc.Infos.ApplicationName := ApplicationName;
-FDoc.Infos.CreationDate := Now;
-
-FDoc.Options := [poPageOriginAtTop];
-FDoc.FontDirectory := 'fonts';
-
-FDoc.StartDocument;
-Section := FDoc.Sections.AddSection;
-
-{get form aspect ratio}
-DW := AControl.Width;
-DH := AControl.Height;
-Aspect := DW/DH;
-if Aspect > 1 then
-   FDoc.DefaultOrientation := ppoLandscape
-  else
-   FDoc.DefaultOrientation := ppoPortrait;
-
-FDoc.DefaultUnitOfMeasure := uomPixels;
-
-{set paper size, smaller than A4 use A4 otherwise use custom as nothing larger}
-CustomPaper.H := DH + 2*MT;
-CustomPaper.W := DW + 2*ML;
-CustomPaper.Printable.T := 10;
-CustomPaper.Printable.L := 10;
-CustomPaper.Printable.R := CustomPaper.W - 10;
-CustomPaper.Printable.B := CustomPaper.H - 10;
-if (DW > 842 - 2*ML) or (DH > 595 - 2*MT) then
-   FDoc.DefaultPaperType := ptCustom
-  else FDoc.DefaultPaperType := ptA4;
-
-{Add first page}
-Page := SetupPage(AControl,FDoc,ML,MT);
-FirstPage := true;
-
-{set up fonts}
-{It is very difficult to get the system fonts. For now the user must copy
-any fonts used in the form to the /fonts directory and specify them explicitly}
-ftTitle := FDoc.Addfont('Helvetica');
-ftText := FDoc.Addfont('FreeSans.ttf','Regular');
-
-{write page titel centered}
-{Header2PDF('Example form to PDF',Page,ftTitle,ML,MT);}
-
-RecurseControls(AControl,FDoc,Page,ftText,ML,MT);
-
-{Save the PDF}
-FDoc.SaveToFile(FileName);
-FDoc.Destroy;
-end;
+finalization
+FreeAndNil(FDoc);
 
 end.
 

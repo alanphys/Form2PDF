@@ -58,6 +58,7 @@ type
       ListBox1: TListBox;
       MainMenu: TMainMenu;
       Memo1: TMemo;
+      miPrintSel: TMenuItem;
       miPrintActive: TMenuItem;
       miPrintAll: TMenuItem;
       PageControl1: TPageControl;
@@ -74,7 +75,6 @@ type
       RadioButton8: TRadioButton;
       RadioGroup1: TRadioGroup;
       RandomChartSource1: TRandomChartSource;
-      SaveDialog: TSaveDialog;
       Shape1: TShape;
       Shape10: TShape;
       Shape11: TShape;
@@ -101,6 +101,7 @@ type
       StaticText4: TStaticText;
       StaticText5: TStaticText;
       StaticText6: TStaticText;
+      StatusBar: TStatusBar;
       StringGrid2: TStringGrid;
       StringGrid1: TStringGrid;
       TabSheet1: TTabSheet;
@@ -116,7 +117,7 @@ type
       procedure FormCreate(Sender: TObject);
       procedure miPrintActiveClick(Sender: TObject);
       procedure miPrintAllClick(Sender: TObject);
-      procedure PageControl1Change(Sender: TObject);
+      procedure miPrintSelClick(Sender: TObject);
    private
 
    public
@@ -128,7 +129,7 @@ var
 
 implementation
 
-uses form2pdf;
+uses form2pdf, StrUtils;
 
 {$R *.lfm}
 
@@ -154,19 +155,39 @@ end;
 
 procedure TF2PDFExForm.miPrintActiveClick(Sender: TObject);
 begin
-Form2PDF.FormToPDF(PageControl1.ActivePage,'test.pdf');
+StatusBar.SimpleText := IntToStr(FormToPDF(PageControl1.ActivePage,'test.pdf'))
+   + ' objects printed'
 end;
 
 procedure TF2PDFExForm.miPrintAllClick(Sender: TObject);
 begin
-Form2PDF.FormToPDF(F2PDFExForm,'test.pdf');
+if FormToPDF = 0 then
+   StatusBar.SimpleText := IntToStr(FormToPDF(F2PDFExForm,'test.pdf')) + ' objects printed'
+  else
+   StatusBar.SimpleText := 'Sorry, no fonts available' ;
 end;
 
-procedure TF2PDFExForm.PageControl1Change(Sender: TObject);
+
+procedure TF2PDFExForm.miPrintSelClick(Sender: TObject);
+var sTabs      :string;
+    ObjectCount,
+    TabIndex   :integer;
 begin
-
+sTabs := '1,2,3,4,5,6,7,8,9';
+ObjectCount := 0;
+if InputQuery('Please select tabs to be printed','Enter the tab numbers delimited by commas',
+   sTabs) then
+   try
+   while sTabs <> '' do
+      begin
+      TabIndex := StrToInt(Copy2SymbDel(sTabs,',')) - 1;
+      ObjectCount := ObjectCount + FormToPDF(PageControl1.Pages[TabIndex]);
+      end;
+   StatusBar.SimpleText := IntToStr(FormToPDF('test.pdf')) + ' objects printed'
+   except
+      StatusBar.SimpleText := 'Sorry, not a valid tab list';
+      end;
 end;
-
 
 end.
 
