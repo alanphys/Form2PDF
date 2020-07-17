@@ -25,7 +25,7 @@ TComboBox
 TListBox
 TStringGrid
 TValueListEditor
-TMemo (does not support word wrapping)
+TMemo (does not support word wrapping under linux)
 TCheckBox
 TRadioButton
 TImage
@@ -39,19 +39,19 @@ TRadioGroup
 TCheckGroup
 
 4) Usage
-To use copy form2pdf.pas into your source directory and include Form2PDF in your uses clause. Any visual control can be passed as a parent eg. TTabSheet or TForm.
+To use copy form2pdf.pas into your source directory and include Form2PDF in your uses clause. You will need to add the path to the fcl-pdf source so the standard font metrics file can be included. Any visual control can be passed as a parent eg. TTabSheet or TForm.
 
 FormToPDF 
-initialise FDoc and check if fonts are available
+Initialise FDoc and check if fonts are available. Returns 0 if everything OK, error code otherwise.
 
 FormToPDF(AControl: TControl)
-parse controls and append pages to Fdoc
+Parse controls and append pages to Fdoc. Returns number of objects in FDoc, error code otherwise.
 
 FormToPDF(FileName:string)
-use to save FDoc to PDF and reset FDoc
+Save FDoc to PDF and reset FDoc. Returns number of objects in FDoc, error code otherwise.
 
 FormToPDF(AControl:TControl; FileName:string) 
-parse controls and save and close Fdoc
+Parse controls and save and close Fdoc. Returns number of objects in FDoc, error code otherwise.
 
 5) History
 26/6/2020 Initial commit.
@@ -60,12 +60,13 @@ parse controls and save and close Fdoc
 6/7/2020  changed FormToPDF to function to return error code
           added control and filename checks
 8/7/2020  add functionality to append pages to document, FDoc now global}
+13/7/2020 load and use system fonts
+15/7/2020 add text alignment for labels
+17/7/2020 add text alignment for spinedits
+          add Panel caption
 
 6) To Do
 Implement word wrapping on TMemo (seems to be OK for Windows)
-Text alignment on TEdit, TSpinEdit, TFloatSpinEdit, TSpinEditEx and TFloatSpinEditEx.
 Add separate header margin
-Implement system fonts
-Caption for TPanel
 
                    

@@ -47,7 +47,9 @@ History
 5/07/2020 (TvS):moved initialization of FormToPDF to initalization part of unit
 6/7/2020  changed FormToPDF to function to return error code
           added control and filename checks
-8/7/2020  add functionality to append pages to document, FDoc now global}
+8/7/2020  add functionality to append pages to document, FDoc now global
+13/7/2020 load and use system fonts
+15/7/2020 add text alignment for fonts}
 
 interface
 
@@ -64,7 +66,13 @@ function FormToPDF(AControl:TControl; FileName:string):integer; {parse controls 
 implementation
 
 uses StdCtrls, ExtCtrls, ComCtrls,TAGraph, Grids, Spin, SpinEx, EditBtn,ValEdit,
-     fpparsettf, fpttf, intfgraphics;
+     fpparsettf, fpttf, intfgraphics, StrUtils;
+
+{Set Include files in "Project Options, Paths" to include
+/usr/share/fpsrc/packages/fcl-pdf/src for linux and
+C:\lazarus\fpc\3.0.4\source\packages\fcl-pdf\src for windows
+otherwise the fontmetrics_stdpdf.inc file will not be found}
+{$I fontmetrics_stdpdf.inc }
 
 procedure RecurseControls(AControl:TControl; FDoc:TPDFDocument; Page:TPDFPage; ftText,ML,MT:integer); forward;
 procedure ParseControls(AControl:TControl; FDoc:TPDFDocument; Page:TPDFPage; ftText,ML,MT:integer); forward;
@@ -128,26 +136,6 @@ case APen.Style of
 end;
 
 
-procedure Header2PDF(cForm:Tform; APage:TPDFPage; IDX,ML,MT:integer);
-var DX,DY,                     {x and y pos to draw item}
-    DW         :integer;       {height and width to draw item}
-    lFC        :TFPFontCacheItem;{font item}
-    FtName     :string;
-
-begin
-FtName := 'FreeSans';
-lFC := gTTFontCache.Find(FtName, True, False);
-if not Assigned(lFC) then
-   raise Exception.Create(FtName + ' font not found');
-DW := Round(lFC.TextWidth(cForm.Caption,24));
-DX := (APage.Paper.W - DW) div 2;
-DY := (MT - 24) div 2 + 24;                        {put caption halfway in header}
-APage.SetFont(IDX, 24);
-APage.SetColor(cForm.Font.Color, false);
-APage.WriteText(DX,DY,cForm.Caption);
-end;
-
-
 procedure DrawVarBorder(AControl:TControl; APage:TPDFPage; DX,DY,ML,MT:integer);
 {draw rectangle around border}
 var DW,DH      :integer;       {height and width to draw item}
@@ -181,18 +169,129 @@ APage.DrawRect(DX,DY,DW,DH,1,IsFilled,true);
 end;
 
 
-function SetControlFont(AControl:TControl; APage:TPDFPage; IDX:integer):integer;
-var fsize      :integer;       {font size}
+procedure SetControlFont(AControl:TControl; APage:TPDFPage; var IDX,fSize:integer);
+var fFamily,                   {font family}
+    fName      :string;        {font name}
+    fData      :TFontData;
+    lFC        :TFPFontCacheItem;{font item}
+    fBold,
+    fItalic    :boolean;
+
 begin
-fSize := abs(GetFontData(AControl.Font.Handle).Height);
+fData := GetFontData(AControl.Font.Handle);
+fSize := abs(fData.Height);
+if fSize = 0 then fSize := 12; {windows returns default control size of 0}
+fName := fData.Name;
+if Graphics.fsBold in fData.Style then fBold := true else fBold := false;
+if Graphics.fsItalic in fData.Style then fItalic := true else fItalic := false;
+
+lFC := gTTFontCache.Find(fName, fBold, fItalic);
+if Assigned(lFC) then
+   begin                       {use system fonts}
+   {we need to further specialise FamilyName otherwise base font is loaded}
+   fFamily := lFC.FamilyName;
+   if fBold then fFamily := lFC.FamilyName + '-Bold';
+   if fItalic then fFamily := lFC.FamilyName + '-Italic';
+   if fBold and fItalic then fFamily := lFC.FamilyName + '-BoldItalic';
+   IDX := APage.Document.AddFont(lFC.FileName,fFamily);
+   end
+  else                         {fall back on internal pdf fonts}
+   begin
+   if Pos('SANS',UpCase(fname)) > 0 then
+      begin
+      if fBold then IDX := APage.Document.AddFont('Helvetica-Bold');
+      if fItalic then IDX := APage.Document.AddFont('Helvetica-Oblique');
+      if fBold and fItalic then IDX := APage.Document.AddFont('Helvetica-BoldOblique');
+      if not fBold and not fItalic then IDX := APage.Document.AddFont('Helvetica');
+      end
+     else
+      begin
+      if fBold then IDX := APage.Document.AddFont('Times-Bold');
+      if fItalic then IDX := APage.Document.AddFont('Times-Italic');
+      if fBold and fItalic then IDX := APage.Document.AddFont('Times-BoldItalic');
+      if not fBold and not fItalic then IDX := APage.Document.AddFont('Times-Roman');
+      end;
+   end;
 APage.SetColor(ColorToPDF(AControl.Font.Color),false);
 APage.SetFont(IDX,fSize);
-Result := fsize;
+end;
+
+
+function GetFontTextWidth(AText:string; APage:TPDFPage; IDX,fSize:integer):double;
+{string width in points}
+var I          :integer;
+    lWidth     :double;
+    lFC        :TFPFontCacheItem;{font item}
+    fName      :string;
+    AFont      :TPDFFont;
+    FontWArr   :TPDFFontWidthArray;
+    fBold,
+    fItalic    :boolean;
+begin
+lWidth := 0;
+if IDX >= 0 then
+   begin
+   AFont := APage.Document.Fonts[IDX];
+   FName := AFont.Name;
+   if AFont.IsStdFont then         {can't use protected members to get this so have to do it ourselves}
+      begin
+      case fName of
+         'Courier':                 FontWArr := FONT_COURIER_FULL;
+         'Courier-Bold':            FontWArr := FONT_COURIER_FULL;
+         'Courier-Oblique':         FontWArr := FONT_COURIER_FULL;
+         'Courier-BoldOblique':     FontWArr := FONT_COURIER_FULL;
+         'Helvetica':               FontWArr := FONT_HELVETICA_ARIAL;
+         'Helvetica-Bold':          FontWArr := FONT_HELVETICA_ARIAL_BOLD;
+         'Helvetica-Oblique':       FontWArr := FONT_HELVETICA_ARIAL_ITALIC;
+         'Helvetica-BoldOblique':   FontWArr := FONT_HELVETICA_ARIAL_BOLD_ITALIC;
+         'Times-Roman':             FontWArr := FONT_TIMES;
+         'Times-Bold':              FontWArr := FONT_TIMES_BOLD;
+         'Times-Italic':            FontWArr := FONT_TIMES_ITALIC;
+         'Times-BoldItalic':        FontWArr := FONT_TIMES_BOLD_ITALIC;
+         'Symbol':                  FontWArr := FONT_SYMBOL;
+         'ZapfDingbats':            FontWArr := FONT_ZAPFDINGBATS;
+         end;
+      lWidth := 0;
+      for I:= 1 to length(AText) do
+         lWidth := lWidth + FontWArr[ord(Atext[I])];
+      lWidth := lWidth*fSize*72/(96*1540);
+      end
+     else
+      begin
+      if Pos('BOLD',upcase(fName)) > 0 then fBold := true else fBold := false;
+      if Pos('ITALIC',upcase(fname)) > 0 then fItalic := true else fItalic := false;
+      fname := Copy2Symb(fname,'-');
+      lFC := gTTFontCache.Find(fName, fBold, fItalic);
+      if Assigned(lFC) then
+         begin
+         lWidth := lFC.TextWidth(AText,fSize);       {TextWidth gives size in screen pixels}
+         end
+        else
+         lWidth := -1;
+      end;
+   end;
+Result := lWidth;
 end;
 
 {------------------------------------------------------------------------------
 Component Procedures
 ------------------------------------------------------------------------------}
+
+procedure Header2PDF(cForm:Tform; APage:TPDFPage; IDX,ML,MT:integer);
+var fSize,                     {font size}
+    DX,DY,                     {x and y pos to draw item}
+    DW         :integer;       {height and width to draw item}
+
+begin
+SetControlFont(cForm,APage,IDX,fSize);
+DW := Round(GetFontTextWidth(cForm.Caption,APage,IDX,fSize));
+DX := (APage.Paper.W - DW) div 2;
+DY := (MT - 24) div 2 + 24;                        {put caption halfway in header}
+APage.SetFont(IDX, fSize);
+APage.SetColor(cForm.Font.Color, false);
+APage.WriteText(DX,DY,cForm.Caption);
+end;
+
 
 {TLabel}
 procedure LabelToPDF(cLabel:TLabel; APage:TPDFPage; IDX,ML,MT:integer);
@@ -202,9 +301,15 @@ var fSize,                     {font size}
 begin
 if cLabel.Visible then
    begin
-   fsize := SetControlFont(cLabel,APage,IDX);
+   SetControlFont(cLabel,APage,IDX,fSize);
    DH := cLabel.Height;
-   DX := ML + cLabel.Left;
+   case cLabel.Alignment of
+      taLeftJustify : DX := ML + cLabel.Left;
+      taCenter      : DX := ML + cLabel.Left + Round((cLabel.Width
+                           - GetFontTextWidth(cLabel.Caption,APage,IDX,fSize))/2);
+      taRightJustify: DX := ML + cLabel.Left + cLabel.Width
+                           - Round(GetFontTextWidth(cLabel.Caption,APage,IDX,fSize));
+      end; {of case}
    DY := MT + cLabel.Top + DH;
    APage.WriteText(DX,DY,cLabel.Caption);
    end;
@@ -219,9 +324,15 @@ var fSize,                     {font size}
 begin
 if cLabel.Visible then
    begin
-   fsize := SetControlFont(cLabel,APage,IDX);
+   SetControlFont(cLabel,APage,IDX,fsize);
    DH := cLabel.Height;
-   DX := ML + cLabel.Left;
+   case cLabel.Alignment of
+      taLeftJustify : DX := ML + cLabel.Left;
+      taCenter      : DX := ML + cLabel.Left + Round((cLabel.Width
+                           - GetFontTextWidth(cLabel.Caption,APage,IDX,fSize))/2);
+      taRightJustify: DX := ML + cLabel.Left + cLabel.Width
+                           - Round(GetFontTextWidth(cLabel.Caption,APage,IDX,fSize));
+      end; {of case}
    DY := MT + cLabel.Top + DH;
    APage.WriteText(DX,DY,cLabel.Caption);
    end;
@@ -327,7 +438,7 @@ if cGroupBx.Visible then
    DrawFixedBorder(cGroupBx,APage,ML,MT);
 
    {write groupbox caption}
-   fsize := SetControlFont(cGroupBx,APage,IDX);
+   SetControlFont(cGroupBx,APage,IDX,fsize);
    DX := ML + cGroupBx.Left + 2;
    DY := MT + cGroupBx.Top + fSize + 2;
    APage.WriteText(DX,DY,cGroupBx.Caption);
@@ -343,12 +454,25 @@ end;
 
 {TPanel}
 procedure PanelToPDF(cPanel:TPanel; FDoc:TPDFDocument; APage:TPDFPage; IDX,ML,MT:integer);
-var I          :integer;
+var I,
+    fSize,                     {font size}
+    DX,DY      :integer;       {x and y pos to draw item}
 begin
 if cPanel.Visible then
    begin
-   {for now don't write caption}
    DrawFixedBorder(cPanel,APage,ML,MT);
+
+   {write groupbox caption}
+   SetControlFont(cPanel,APage,IDX,fsize);
+   case cPanel.Alignment of
+      taLeftJustify : DX := ML + cPanel.Left;
+      taCenter      : DX := ML + cPanel.Left + Round((cPanel.Width
+                           - GetFontTextWidth(cPanel.Caption,APage,IDX,fSize))/2);
+      taRightJustify: DX := ML + cPanel.Left + cPanel.Width - 2
+                           - Round(GetFontTextWidth(cPanel.Caption,APage,IDX,fSize));
+      end; {of case}
+   DY := MT + cPanel.Top + (cPanel.Height + fSize) div 2;
+   APage.WriteText(DX,DY,cPanel.Caption);
 
    {draw components}
    ML := ML + cPanel.Left;
@@ -370,9 +494,15 @@ if cEdit.Visible then
    DrawFixedBorder(cEdit,APage,ML,MT);
 
    {write edit caption}
-   fsize := SetControlFont(cEdit,APage,IDX);
+   SetControlFont(cEdit,APage,IDX,fsize);
    DH := cEdit.Height;
-   DX := ML + cEdit.Left;
+   case cEdit.Alignment of
+      taLeftJustify : DX := ML + cEdit.Left;
+      taCenter      : DX := ML + cEdit.Left + Round((cEdit.Width
+                           - GetFontTextWidth(cEdit.Caption,APage,IDX,fSize))/2);
+      taRightJustify: DX := ML + cEdit.Left + cEdit.Width - 2
+                           - Round(GetFontTextWidth(cEdit.Caption,APage,IDX,fSize));
+      end; {of case}
    DY := MT + cEdit.Top + fSize + (DH - fSize) div 2;
    APage.WriteText(DX + 2,DY,cEdit.Caption);
    end;
@@ -397,14 +527,26 @@ if cSpinEd.Visible then
    DrawFixedBorder(cSpinEd,APage,ML,MT);
 
    {write edit caption}
-   fsize := SetControlFont(cSpinEd,APage,IDX);
+   SetControlFont(cSpinEd,APage,IDX,fsize);
    DH := cSpinEd.Height;
-   DX := ML + cSpinEd.Left;
+   case cSpinEd.Alignment of
+      taLeftJustify : DX := ML + cSpinEd.Left;
+      taCenter      : DX := ML + cSpinEd.Left + Round((cSpinEd.Width - DH/2
+                         - GetFontTextWidth(cSpinEd.Caption,APage,IDX,fSize))/2);
+      taRightJustify: DX := ML + cSpinEd.Left + cSpinEd.Width  - DH div 2 - 4
+                          - Round(GetFontTextWidth(cSpinEd.Caption,APage,IDX,fSize));
+      end; {of case}
    DY := MT + cSpinEd.Top + fSize + (DH - fSize) div 2;
    APage.WriteText(DX + 2,DY,cSpinEd.Caption);
 
+   {draw separator line}
+   X1 := ML + cSpinEd.Left + cSpinEd.Width - DH div 2;
+   Y1 := MT + cSpinEd.Top;
+   Y2 := Y1 + DH;
+   APage.DrawLine(X1,Y1,X1,Y2,1,true);
+
    {draw up tick}
-   X1 := DX + cSpinEd.Width - DH div 2 + 2;
+   X1 := ML + cSpinEd.Left + cSpinEd.Width - DH div 2 + 2;
    Y1 := MT + cSpinEd.Top + 2;
    X2 := X1 + DH div 4 - 2;
    Y2 := Y1 + DH div 3 - 2;
@@ -448,14 +590,26 @@ if cSpinEd.Visible then
    DrawFixedBorder(cSpinEd,APage,ML,MT);
 
    {write edit caption}
-   fsize := SetControlFont(cSpinEd,APage,IDX);
+   SetControlFont(cSpinEd,APage,IDX,fsize);
    DH := cSpinEd.Height;
-   DX := ML + cSpinEd.Left;
+   case cSpinEd.Alignment of
+      taLeftJustify : DX := ML + cSpinEd.Left;
+      taCenter      : DX := ML + cSpinEd.Left + Round((cSpinEd.Width - DH/2
+                           - GetFontTextWidth(cSpinEd.Caption,APage,IDX,fSize))/2);
+      taRightJustify: DX := ML + cSpinEd.Left + cSpinEd.Width - DH div 2 - 4
+                           - Round(GetFontTextWidth(cSpinEd.Caption,APage,IDX,fSize));
+      end; {of case}
    DY := MT + cSpinEd.Top + fSize + (DH - fSize) div 2;
    APage.WriteText(DX + 2,DY,cSpinEd.Caption);
 
+   {draw separator line}
+   X1 := ML + cSpinEd.Left + cSpinEd.Width - DH div 2;
+   Y1 := MT + cSpinEd.Top;
+   Y2 := Y1 + DH;
+   APage.DrawLine(X1,Y1,X1,Y2,1,true);
+
    {draw up tick}
-   X1 := DX + cSpinEd.Width - DH div 2 + 2;
+   X1 := ML + cSpinEd.Left + cSpinEd.Width - DH div 2 + 2;
    Y1 := MT + cSpinEd.Top + 2;
    X2 := X1 + DH div 4 - 2;
    Y2 := Y1 + DH div 3 - 2;
@@ -485,14 +639,26 @@ if cSpinEd.Visible then
    DrawFixedBorder(cSpinEd,APage,ML,MT);
 
    {write edit caption}
-   fsize := SetControlFont(cSpinEd,APage,IDX);
+   SetControlFont(cSpinEd,APage,IDX,fsize);
    DH := cSpinEd.Height;
-   DX := ML + cSpinEd.Left;
+   case cSpinEd.Alignment of
+      taLeftJustify : DX := ML + cSpinEd.Left;
+      taCenter      : DX := ML + cSpinEd.Left + Round((cSpinEd.Width - DH/2
+                           - GetFontTextWidth(cSpinEd.Caption,APage,IDX,fSize))/2);
+      taRightJustify: DX := ML + cSpinEd.Left + cSpinEd.Width  - DH div 2 - 4
+                           - Round(GetFontTextWidth(cSpinEd.Caption,APage,IDX,fSize));
+      end; {of case}
    DY := MT + cSpinEd.Top + fSize + (DH - fSize) div 2;
    APage.WriteText(DX + 2,DY,cSpinEd.Caption);
 
+   {draw separator line}
+   X1 := ML + cSpinEd.Left + cSpinEd.Width - DH div 2;
+   Y1 := MT + cSpinEd.Top;
+   Y2 := Y1 + DH;
+   APage.DrawLine(X1,Y1,X1,Y2,1,true);
+
    {draw up tick}
-   X1 := DX + cSpinEd.Width - DH div 2 + 2;
+   X1 := ML + cSpinEd.Left + cSpinEd.Width - DH div 2 + 2;
    Y1 := MT + cSpinEd.Top + 2;
    X2 := X1 + DH div 4 - 2;
    Y2 := Y1 + DH div 3 - 2;
@@ -519,7 +685,7 @@ if cDirEdit.Visible then
    DrawFixedBorder(cDirEdit,APage,ML,MT);
 
    {write edit caption}
-   fsize := SetControlFont(cDirEdit,APage,IDX);
+   SetControlFont(cDirEdit,APage,IDX,fsize);
    DH := cDirEdit.Height;
    DX := ML + cDirEdit.Left;
    DY := MT + cDirEdit.Top + fSize + (DH - fSize) div 2;
@@ -539,7 +705,7 @@ if cFileEdit.Visible then
    DrawFixedBorder(cFileEdit,APage,ML,MT);
 
    {write edit caption}
-   fsize := SetControlFont(cFileEdit,APage,IDX);
+   SetControlFont(cFileEdit,APage,IDX,fsize);
    DH := cFileEdit.Height;
    DX := ML + cFileEdit.Left;
    DY := MT + cFileEdit.Top + fSize + (DH - fSize) div 2;
@@ -563,7 +729,7 @@ if cCmboBx.Visible then
    DrawFixedBorder(cCmboBx,APage,ML,MT);
 
    {write edit caption}
-   fsize := SetControlFont(cCmboBx,APage,IDX);
+   SetControlFont(cCmboBx,APage,IDX,fsize);
    DH := cCmboBx.Height;
    DW := cCmboBx.Width;
    DX := ML + cCmboBx.Left;
@@ -593,7 +759,7 @@ if cMemo.Visible then
    begin
    {write text, no line wrapping}
    fp := true;
-   fsize := SetControlFont(cMemo,APage,IDX);
+   SetControlFont(cMemo,APage,IDX,fsize);
    DX := ML + cMemo.Left + 2;
    DY := MT + cMemo.Top + fsize + 2;
    for I:=0 to cMemo.Lines.Count - 1 do
@@ -604,7 +770,7 @@ if cMemo.Visible then
          begin
          DrawVarBorder(cMemo,APage,DX,DY,ML,MT);
          APage := SetupPage(cMemo,FDoc,ML,MT);
-         fsize := SetControlFont(cMemo,APage,IDX);
+         SetControlFont(cMemo,APage,IDX,fsize);
          DY := MT + fsize + 2;
          fp := false;
          end;
@@ -625,7 +791,7 @@ begin
 if cLstBx.Visible then
    begin
    fp := true;
-   fsize := SetControlFont(cLstBx,APage,IDX);
+   SetControlFont(cLstBx,APage,IDX,fsize);
    DX := ML + cLstBx.Left + 2;
    DY := MT + cLstBx.Top + fsize + 2;
    for I:=0 to cLstBx.Items.Count - 1 do
@@ -636,7 +802,7 @@ if cLstBx.Visible then
          begin
          DrawVarBorder(cLstBx,APage,DX,DY,ML,MT);
          APage := SetupPage(cLstBx,FDoc,ML,MT);
-         fsize := SetControlFont(cLstBx,APage,IDX);
+         SetControlFont(cLstBx,APage,IDX,fsize);
          DY := MT + cLstBx.Top + fsize + 2;
          fp := false;
          end;
@@ -658,7 +824,7 @@ begin
 if cStrGrd.Visible then
    begin
    fp := true;
-   fsize := SetControlFont(cStrGrd,APage,IDX);
+   SetControlFont(cStrGrd,APage,IDX,fsize);
    DX := ML + cStrGrd.Left + 2;
    DY := MT + cStrGrd.Top + fsize + 2;
    for I:=0 to cStrGrd.RowCount - 1 do
@@ -678,7 +844,7 @@ if cStrGrd.Visible then
          begin
          DrawVarBorder(cStrGrd,APage,DX,DY,ML,MT);
          APage := SetupPage(cStrGrd,FDoc,ML,MT);
-         fsize := SetControlFont(cStrGrd,APage,IDX);
+         SetControlFont(cStrGrd,APage,IDX,fsize);
          DY := MT + cStrGrd.Top + fsize + 2;
          fp := false;
          end;
@@ -702,7 +868,7 @@ if cValueList.Visible then
    begin
    fp := true;
    SI := 0;
-   fsize := SetControlFont(cValueList,APage,IDX);
+   SetControlFont(cValueList,APage,IDX,fsize);
    DX := ML + cValueList.Left + 2;
    DY := MT + cValueList.Top + fsize + 2;
 
@@ -725,7 +891,7 @@ if cValueList.Visible then
          begin
          DrawVarBorder(cValueList,APage,DX,DY,ML,MT);
          APage := SetupPage(cValueList,FDoc,ML,MT);
-         fsize := SetControlFont(cValueList,APage,IDX);
+         SetControlFont(cValueList,APage,IDX,fsize);
          DY := MT + cValueList.Top + fsize + 2;
          fp := false;
          end;
@@ -745,7 +911,7 @@ begin
 if cCheckBx.Visible then
    begin
    {write caption}
-   fsize := SetControlFont(cCheckBx,APage,IDX);
+   SetControlFont(cCheckBx,APage,IDX,fsize);
    DH := cCheckbx.Height;
    DX := ML + cCheckBx.Left + Round(fSize*1.2);       {shift text right to allow for circle}
    DY := MT + cCheckBx.Top + (DH + fsize) div 2;
@@ -780,7 +946,7 @@ begin
 if cRadioBtn.Visible then
    begin
    {write caption}
-   fsize := SetControlFont(cRadioBtn,APage,IDX);
+   SetControlFont(cRadioBtn,APage,IDX,fsize);
    DH := cRadioBtn.Height;
    DX := ML + cRadioBtn.Left + Round(fSize*1.2);       {shift text right to allow for circle}
    DY := MT + cRadioBtn.Top + (DH + fsize) div 2;
@@ -815,7 +981,7 @@ if cRadioGrp.Visible then
    DrawFixedBorder(cRadioGrp,APage,ML,MT);
 
    {write caption}
-   fsize := SetControlFont(cRadioGrp,APage,IDX);
+   SetControlFont(cRadioGrp,APage,IDX,fsize);
    DX := ML + cRadioGrp.Left + 2;
    DY := MT + cRadioGrp.Top + fSize + 2;
    APage.WriteText(DX,DY,cRadioGrp.Caption);
@@ -840,7 +1006,7 @@ if cCheckGrp.Visible then
    DrawFixedBorder(cCheckGrp,APage,ML,MT);
 
    {write caption}
-   fsize := SetControlFont(cCheckGrp,APage,IDX);
+   SetControlFont(cCheckGrp,APage,IDX,fsize);
    DX := ML + cCheckGrp.Left + 2;
    DY := MT + cCheckGrp.Top + fSize + 2;
    APage.WriteText(DX,DY,cCheckGrp.Caption);
@@ -953,7 +1119,7 @@ end;
 
 procedure RecurseControls(AControl:TControl; FDoc:TPDFDocument; Page:TPDFPage; ftText,ML,MT:integer);
 {Iterate through components and print them to PDF, recurse into nested controls.
-Terrible programming but use exit to emulate caes and increase efficiency}
+Terrible programming but use exit to emulate case and increase efficiency}
 var cForm      :TForm;
     cPageCtrl  :TPageControl;
     I          :integer;
@@ -1072,8 +1238,8 @@ if (Result = 0) then
    {set up fonts}
    {It is very difficult to get the system fonts. For now the user must copy
    any fonts used in the form to the /fonts directory and specify them explicitly}
-   ftTitle := FDoc.Addfont('Helvetica');
-   ftText := FDoc.Addfont('FreeSans.ttf','Regular');
+   {ftTitle := FDoc.Addfont('Helvetica');
+   ftText := FDoc.Addfont('FreeSans.ttf','Regular');}
 
    {if user has not already set info then set defaults}
    if FDoc.Infos.Title <> '' then FDoc.Infos.Title := Application.Title;
@@ -1125,9 +1291,10 @@ end;
 initialization
 FDoc := nil;
 {add any extra fonts}
-gTTFontCache.SearchPath.Add(ExtractFilePath(Application.ExeName) + 'fonts');
-{gTTFontCache.ReadStandardFonts;}
-gTTFontCache.BuildFontCache;
+gTTFontCache.ReadStandardFonts;
+{gTTFontCache.SearchPath.Add(ExtractFilePath(Application.ExeName) + 'fonts');
+gTTFontCache.BuildFontCache;}
+gTTFontCache.DPI := 72;
 
 finalization
 FreeAndNil(FDoc);

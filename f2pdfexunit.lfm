@@ -1,60 +1,60 @@
 object F2PDFExForm: TF2PDFExForm
   Left = 462
-  Height = 420
+  Height = 424
   Top = 181
-  Width = 587
+  Width = 593
   Caption = 'Form to PDF Example'
-  ClientHeight = 398
-  ClientWidth = 587
-  DesignTimePPI = 95
+  ClientHeight = 402
+  ClientWidth = 593
   Menu = MainMenu
   OnCreate = FormCreate
   LCLVersion = '2.0.8.0'
   object PageControl1: TPageControl
     Left = 0
-    Height = 376
+    Height = 380
     Top = 0
-    Width = 587
-    ActivePage = TabSheet9
+    Width = 593
+    ActivePage = TabSheet5
     Align = alClient
     ParentFont = False
-    TabIndex = 8
+    TabIndex = 4
     TabOrder = 0
+    OnChange = PageControl1Change
     object TabSheet1: TTabSheet
       Caption = 'Text 1'
-      ClientHeight = 345
-      ClientWidth = 583
+      ClientHeight = 346
+      ClientWidth = 589
       ParentFont = False
       object Image: TImage
-        Left = 48
-        Height = 167
+        Left = 49
+        Height = 169
         Top = 32
-        Width = 182
+        Width = 184
         Stretch = True
       end
       object Shape1: TShape
-        Left = 48
+        Left = 49
         Height = 1
-        Top = 277
-        Width = 199
+        Top = 280
+        Width = 201
       end
       object Shape2: TShape
-        Left = 48
+        Left = 49
         Height = 1
-        Top = 340
-        Width = 199
+        Top = 344
+        Width = 201
       end
       object Label1: TLabel
-        Left = 55
+        Left = 56
         Height = 17
-        Top = 301
+        Top = 304
         Width = 186
         Caption = 'This is an example PDF form'
         ParentColor = False
         ParentFont = False
       end
       object Label12: TLabel
-        Left = 368
+        Left = 372
         Height = 8
         Top = 32
         Width = 21
@@ -64,9 +64,9 @@ object F2PDFExForm: TF2PDFExForm
         ParentFont = False
       end
       object Label13: TLabel
-        Left = 364
+        Left = 368
         Height = 13
-        Top = 65
+        Top = 66
         Width = 28
         Caption = 'Small'
         Font.Color = clRed
@@ -75,9 +75,9 @@ object F2PDFExForm: TF2PDFExForm
         ParentFont = False
       end
       object Label14: TLabel
-        Left = 355
+        Left = 359
         Height = 15
-        Top = 109
+        Top = 110
         Width = 48
         Caption = 'Medium'
         Font.Color = clGreen
@@ -86,9 +86,9 @@ object F2PDFExForm: TF2PDFExForm
         ParentFont = False
       end
       object Label15: TLabel
-        Left = 365
+        Left = 369
         Height = 19
-        Top = 153
+        Top = 155
         Width = 26
         Caption = 'Big'
         Font.Color = clBlue
@@ -97,9 +97,9 @@ object F2PDFExForm: TF2PDFExForm
         ParentFont = False
       end
       object Label16: TLabel
-        Left = 340
+        Left = 344
         Height = 30
-        Top = 201
+        Top = 203
         Width = 83
         Caption = 'Bigger'
         Font.Color = clYellow
@@ -108,9 +108,9 @@ object F2PDFExForm: TF2PDFExForm
         ParentFont = False
       end
       object Label17: TLabel
-        Left = 344
+        Left = 348
         Height = 38
-        Top = 258
+        Top = 261
         Width = 71
         Caption = 'Best'
         Font.Color = clNavy
@@ -121,14 +121,14 @@ object F2PDFExForm: TF2PDFExForm
       object Edit1: TEdit
         Left = 47
         Height = 25
-        Top = 227
-        Width = 225
+        Top = 229
+        Width = 227
         ParentFont = False
         TabOrder = 0
         Text = 'Write your text here'
       end
       object StaticText1: TStaticText
-        Left = 456
+        Left = 461
         Height = 38
         Top = 16
         Width = 71
@@ -139,9 +139,9 @@ object F2PDFExForm: TF2PDFExForm
         TabOrder = 1
       end
       object StaticText2: TStaticText
-        Left = 452
+        Left = 457
         Height = 30
-        Top = 83
+        Top = 84
         Width = 79
         AutoSize = True
         Caption = 'Better'
@@ -150,9 +150,9 @@ object F2PDFExForm: TF2PDFExForm
         TabOrder = 2
       end
       object StaticText3: TStaticText
-        Left = 480
+        Left = 485
         Height = 17
-        Top = 142
+        Top = 143
         Width = 23
         AutoSize = True
         Caption = 'Big'
@@ -161,9 +161,9 @@ object F2PDFExForm: TF2PDFExForm
         TabOrder = 3
       end
       object StaticText4: TStaticText
-        Left = 467
+        Left = 472
         Height = 15
-        Top = 189
+        Top = 191
         Width = 48
         AutoSize = True
         Caption = 'Medium'
@@ -172,9 +172,9 @@ object F2PDFExForm: TF2PDFExForm
         TabOrder = 4
       end
       object StaticText5: TStaticText
-        Left = 477
+        Left = 482
         Height = 13
-        Top = 234
+        Top = 236
         Width = 28
         AutoSize = True
         Caption = 'Small'
@@ -183,9 +183,9 @@ object F2PDFExForm: TF2PDFExForm
         TabOrder = 5
       end
       object StaticText6: TStaticText
-        Left = 481
+        Left = 486
         Height = 8
-        Top = 276
+        Top = 279
         Width = 21
         AutoSize = True
         Caption = 'Minute'
@@ -200,9 +200,9 @@ object F2PDFExForm: TF2PDFExForm
       ClientWidth = 583
       ParentFont = False
       object Label2: TLabel
-        Left = 182
+        Left = 184
         Height = 17
-        Top = 317
+        Top = 320
         Width = 214
         Caption = 'Shapes lines and colors example'
         ParentColor = False
@@ -210,74 +210,74 @@ object F2PDFExForm: TF2PDFExForm
       end
       object Shape3: TShape
         Left = 40
-        Height = 79
+        Height = 80
         Top = 32
-        Width = 151
+        Width = 153
         Brush.Color = clRed
       end
       object Shape4: TShape
-        Left = 297
-        Height = 79
+        Left = 300
+        Height = 80
         Top = 31
-        Width = 151
+        Width = 153
         Brush.Style = bsClear
         Pen.Color = clRed
       end
       object Shape5: TShape
-        Left = 326
-        Height = 79
-        Top = 84
-        Width = 151
+        Left = 329
+        Height = 80
+        Top = 85
+        Width = 153
         Brush.Style = bsClear
         Pen.Color = clBlue
         Pen.Style = psDash
       end
       object Shape6: TShape
-        Left = 354
-        Height = 79
-        Top = 138
-        Width = 151
+        Left = 358
+        Height = 80
+        Top = 139
+        Width = 153
         Brush.Style = bsClear
         Pen.Color = clGreen
         Pen.Style = psDashDot
       end
       object Shape7: TShape
-        Left = 383
-        Height = 79
-        Top = 191
-        Width = 151
+        Left = 387
+        Height = 80
+        Top = 193
+        Width = 153
         Brush.Style = bsClear
         Pen.Style = psDashDotDot
       end
       object Shape8: TShape
-        Left = 412
-        Height = 79
-        Top = 244
-        Width = 151
+        Left = 416
+        Height = 80
+        Top = 247
+        Width = 153
         Brush.Style = bsClear
         Pen.Style = psDot
       end
       object Shape9: TShape
-        Left = 63
-        Height = 79
-        Top = 96
-        Width = 151
+        Left = 64
+        Height = 80
+        Top = 97
+        Width = 153
         Brush.Color = clBlue
         Pen.Width = 2
       end
       object Shape10: TShape
-        Left = 87
-        Height = 79
-        Top = 160
-        Width = 151
+        Left = 88
+        Height = 80
+        Top = 162
+        Width = 153
         Brush.Color = clGreen
         Pen.Width = 4
       end
       object Shape11: TShape
-        Left = 111
-        Height = 79
-        Top = 225
-        Width = 151
+        Left = 112
+        Height = 80
+        Top = 227
+        Width = 153
         Pen.Width = 8
       end
     end
@@ -288,59 +288,59 @@ object F2PDFExForm: TF2PDFExForm
       ParentFont = False
       object Shape15: TShape
         Left = 16
-        Height = 301
+        Height = 304
         Top = 8
-        Width = 485
+        Width = 490
         Brush.Style = bsClear
         Shape = stRoundRect
       end
       object Shape12: TShape
-        Left = 63
-        Height = 133
+        Left = 64
+        Height = 134
         Top = 42
-        Width = 192
+        Width = 194
         Shape = stRoundRect
       end
       object Label18: TLabel
-        Left = 196
+        Left = 198
         Height = 17
-        Top = 317
+        Top = 320
         Width = 109
         Caption = 'Different Shapes'
         ParentColor = False
         ParentFont = False
       end
       object Shape13: TShape
-        Left = 135
-        Height = 117
-        Top = 111
-        Width = 191
+        Left = 136
+        Height = 118
+        Top = 112
+        Width = 193
         Shape = stEllipse
       end
       object Shape14: TShape
-        Left = 269
-        Height = 119
-        Top = 158
-        Width = 119
+        Left = 272
+        Height = 120
+        Top = 160
+        Width = 120
         Shape = stEllipse
       end
       object Shape16: TShape
-        Left = 340
+        Left = 344
         Height = 32
-        Top = 63
+        Top = 64
         Width = 40
         Shape = stRoundRect
       end
     end
     object TabSheet3: TTabSheet
       Caption = 'GroupBox 4'
-      ClientHeight = 345
+      ClientHeight = 344
       ClientWidth = 583
       ParentFont = False
       object Label3: TLabel
-        Left = 285
+        Left = 288
         Height = 17
-        Top = 335
+        Top = 339
         Width = 157
         Caption = 'Grouped items example'
         ParentColor = False
@@ -350,11 +350,11 @@ object F2PDFExForm: TF2PDFExForm
         Left = 0
         Height = 344
         Top = 0
-        Width = 183
+        Width = 185
         Align = alLeft
         Caption = 'GroupBox1'
         ClientHeight = 318
-        ClientWidth = 177
+        ClientWidth = 179
         ParentFont = False
         TabOrder = 0
         object Label4: TLabel
@@ -369,7 +369,7 @@ object F2PDFExForm: TF2PDFExForm
         object Label5: TLabel
           Left = 16
           Height = 17
-          Top = 55
+          Top = 56
           Width = 40
           Caption = 'Line 2'
           ParentColor = False
@@ -378,7 +378,7 @@ object F2PDFExForm: TF2PDFExForm
         object Label6: TLabel
           Left = 16
           Height = 17
-          Top = 135
+          Top = 136
           Width = 40
           Caption = 'Line 4'
           ParentColor = False
@@ -387,7 +387,7 @@ object F2PDFExForm: TF2PDFExForm
         object Label7: TLabel
           Left = 16
           Height = 17
-          Top = 95
+          Top = 96
           Width = 40
           Caption = 'Line 3'
           ParentColor = False
@@ -396,7 +396,7 @@ object F2PDFExForm: TF2PDFExForm
         object Label8: TLabel
           Left = 16
           Height = 17
-          Top = 174
+          Top = 176
           Width = 40
           Caption = 'Line 5'
           ParentColor = False
@@ -405,7 +405,7 @@ object F2PDFExForm: TF2PDFExForm
         object Label9: TLabel
           Left = 16
           Height = 17
-          Top = 214
+          Top = 216
           Width = 40
           Caption = 'Line 6'
           ParentColor = False
@@ -414,7 +414,7 @@ object F2PDFExForm: TF2PDFExForm
         object Label10: TLabel
           Left = 16
           Height = 17
-          Top = 253
+          Top = 256
           Width = 40
           Caption = 'Line 7'
           ParentColor = False
@@ -423,7 +423,7 @@ object F2PDFExForm: TF2PDFExForm
         object Label11: TLabel
           Left = 16
           Height = 17
-          Top = 293
+          Top = 296
           Width = 40
           Caption = 'Line 8'
           ParentColor = False
@@ -431,10 +431,10 @@ object F2PDFExForm: TF2PDFExForm
         end
       end
       object RadioGroup1: TRadioGroup
-        Left = 190
-        Height = 172
+        Left = 192
+        Height = 174
         Top = 0
-        Width = 388
+        Width = 392
         AutoFill = True
         Caption = 'RadioGroup1'
         ChildSizing.LeftRightSpacing = 6
@@ -444,8 +444,8 @@ object F2PDFExForm: TF2PDFExForm
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 1
-        ClientHeight = 146
-        ClientWidth = 382
+        ClientHeight = 148
+        ClientWidth = 386
         ParentFont = False
         TabOrder = 1
         object RadioButton5: TRadioButton
@@ -469,7 +469,7 @@ object F2PDFExForm: TF2PDFExForm
         object RadioButton7: TRadioButton
           Left = 6
           Height = 37
-          Top = 74
+          Top = 75
           Width = 370
           Caption = 'RadioButton7'
           ParentFont = False
@@ -478,7 +478,7 @@ object F2PDFExForm: TF2PDFExForm
         object RadioButton8: TRadioButton
           Left = 6
           Height = 35
-          Top = 111
+          Top = 112
           Width = 370
           Caption = 'RadioButton8'
           ParentFont = False
@@ -486,10 +486,10 @@ object F2PDFExForm: TF2PDFExForm
         end
       end
       object CheckGroup1: TCheckGroup
-        Left = 190
-        Height = 150
-        Top = 174
-        Width = 389
+        Left = 192
+        Height = 152
+        Top = 176
+        Width = 393
         AutoFill = True
         Caption = 'CheckGroup1'
         ChildSizing.LeftRightSpacing = 6
@@ -500,8 +500,8 @@ object F2PDFExForm: TF2PDFExForm
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 1
-        ClientHeight = 124
-        ClientWidth = 383
+        ClientHeight = 126
+        ClientWidth = 387
         ParentFont = False
         TabOrder = 2
         object CheckBox5: TCheckBox
@@ -525,7 +525,7 @@ object F2PDFExForm: TF2PDFExForm
         object CheckBox7: TCheckBox
           Left = 6
           Height = 36
-          Top = 82
+          Top = 83
           Width = 371
           Caption = 'CheckBox7'
           ParentFont = False
@@ -535,13 +535,13 @@ object F2PDFExForm: TF2PDFExForm
     end
     object TabSheet5: TTabSheet
       Caption = 'CheckBoxes 5'
-      ClientHeight = 345
-      ClientWidth = 583
+      ClientHeight = 346
+      ClientWidth = 589
       ParentFont = False
       object Label19: TLabel
-        Left = 217
+        Left = 219
         Height = 17
-        Top = 329
+        Top = 332
         Width = 197
         Caption = 'Check and Radio box example'
         ParentColor = False
@@ -549,11 +549,11 @@ object F2PDFExForm: TF2PDFExForm
       end
       object Panel1: TPanel
         Left = 8
-        Height = 174
+        Height = 176
         Top = 0
-        Width = 283
-        ClientHeight = 174
-        ClientWidth = 283
+        Width = 286
+        ClientHeight = 176
+        ClientWidth = 286
         Color = clMoneyGreen
         ParentColor = False
         ParentFont = False
@@ -562,7 +562,7 @@ object F2PDFExForm: TF2PDFExForm
           Left = 17
           Height = 23
           Top = 16
-          Width = 96
+          Width = 98
           Caption = 'CheckBox1'
           Color = clDefault
           ParentColor = False
@@ -572,8 +572,8 @@ object F2PDFExForm: TF2PDFExForm
         object CheckBox2: TCheckBox
           Left = 17
           Height = 23
-          Top = 56
-          Width = 96
+          Top = 57
+          Width = 98
           Caption = 'CheckBox2'
           ParentFont = False
           TabOrder = 1
@@ -581,8 +581,8 @@ object F2PDFExForm: TF2PDFExForm
         object CheckBox3: TCheckBox
           Left = 17
           Height = 23
-          Top = 97
-          Width = 96
+          Top = 98
+          Width = 98
           Caption = 'CheckBox3'
           ParentFont = False
           TabOrder = 2
@@ -590,20 +590,20 @@ object F2PDFExForm: TF2PDFExForm
         object CheckBox4: TCheckBox
           Left = 17
           Height = 23
-          Top = 138
-          Width = 96
+          Top = 139
+          Width = 98
           Caption = 'CheckBox4'
           ParentFont = False
           TabOrder = 3
         end
       end
       object Panel2: TPanel
-        Left = 293
-        Height = 174
+        Left = 296
+        Height = 176
         Top = 0
-        Width = 285
-        ClientHeight = 174
-        ClientWidth = 285
+        Width = 288
+        ClientHeight = 176
+        ClientWidth = 288
         Color = clSkyBlue
         ParentColor = False
         ParentFont = False
@@ -612,7 +612,7 @@ object F2PDFExForm: TF2PDFExForm
           Left = 37
           Height = 23
           Top = 23
-          Width = 112
+          Width = 114
           Caption = 'RadioButton1'
           ParentFont = False
           TabOrder = 0
@@ -620,8 +620,8 @@ object F2PDFExForm: TF2PDFExForm
         object RadioButton2: TRadioButton
           Left = 37
           Height = 23
-          Top = 57
-          Width = 112
+          Top = 58
+          Width = 114
           Caption = 'RadioButton2'
           ParentFont = False
           TabOrder = 1
@@ -629,8 +629,8 @@ object F2PDFExForm: TF2PDFExForm
         object RadioButton3: TRadioButton
           Left = 37
           Height = 23
-          Top = 92
-          Width = 112
+          Top = 93
+          Width = 114
           Caption = 'RadioButton3'
           ParentFont = False
           TabOrder = 2
@@ -638,8 +638,8 @@ object F2PDFExForm: TF2PDFExForm
         object RadioButton4: TRadioButton
           Left = 37
           Height = 23
-          Top = 127
-          Width = 112
+          Top = 128
+          Width = 114
           Caption = 'RadioButton4'
           ParentFont = False
           TabOrder = 3
@@ -647,9 +647,9 @@ object F2PDFExForm: TF2PDFExForm
       end
       object Panel3: TPanel
         Left = 9
-        Height = 75
-        Top = 182
-        Width = 564
+        Height = 76
+        Top = 184
+        Width = 570
         Caption = 'Panel3'
         ParentFont = False
         TabOrder = 2
@@ -657,14 +657,14 @@ object F2PDFExForm: TF2PDFExForm
     end
     object TabSheet6: TTabSheet
       Caption = 'Memo 6'
-      ClientHeight = 345
-      ClientWidth = 583
+      ClientHeight = 346
+      ClientWidth = 589
       ParentFont = False
       object Memo1: TMemo
         Left = 0
-        Height = 344
+        Height = 346
         Top = 0
-        Width = 583
+        Width = 589
         Align = alClient
         Lines.Strings = (
           'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor'
@@ -716,14 +716,14 @@ object F2PDFExForm: TF2PDFExForm
     end
     object TabSheet7: TTabSheet
       Caption = 'TeeChart 7'
-      ClientHeight = 345
-      ClientWidth = 583
+      ClientHeight = 346
+      ClientWidth = 589
       ParentFont = False
       object Chart1: TChart
         Left = 0
-        Height = 344
+        Height = 346
         Top = 0
-        Width = 583
+        Width = 589
         AxisList = <        
           item
             Marks.LabelBrush.Style = bsClear
@@ -764,26 +764,30 @@ object F2PDFExForm: TF2PDFExForm
     end
     object TabSheet8: TTabSheet
       Caption = 'StringGrid 8'
-      ClientHeight = 345
-      ClientWidth = 583
+      ClientHeight = 346
+      ClientWidth = 589
       ParentFont = False
       object StringGrid2: TStringGrid
         Left = 0
-        Height = 142
+        Height = 143
         Top = 0
-        Width = 277
+        Width = 280
         ColCount = 4
         Columns = <        
           item
+            MaxSize = 202
             Title.Caption = 'First col'
           end        
           item
+            MaxSize = 202
             Title.Caption = 'Second col'
           end        
           item
+            MaxSize = 202
             Title.Caption = 'Third col'
           end        
           item
+            MaxSize = 202
             Title.Caption = 'Fourth col'
           end>
         FixedCols = 0
@@ -792,34 +796,30 @@ object F2PDFExForm: TF2PDFExForm
         TabOrder = 0
       end
       object Label20: TLabel
-        Left = 71
+        Left = 72
         Height = 17
-        Top = 214
+        Top = 216
         Width = 131
         Caption = 'String Grid example'
         ParentColor = False
         ParentFont = False
       end
       object StringGrid1: TStringGrid
-        Left = 293
-        Height = 318
+        Left = 296
+        Height = 321
         Top = 0
-        Width = 277
+        Width = 280
         Columns = <        
           item
-            MaxSize = 198
             Title.Caption = 'Col A'
           end        
           item
-            MaxSize = 198
             Title.Caption = 'Col B'
           end        
           item
-            MaxSize = 198
             Title.Caption = 'Col C'
           end        
           item
-            MaxSize = 198
             Title.Caption = 'Col D'
           end>
         ParentFont = False
@@ -828,14 +828,14 @@ object F2PDFExForm: TF2PDFExForm
     end
     object TabSheet9: TTabSheet
       Caption = 'Data 9'
-      ClientHeight = 344
-      ClientWidth = 583
+      ClientHeight = 346
+      ClientWidth = 589
       ParentFont = False
       object ListBox1: TListBox
         Left = 37
-        Height = 90
+        Height = 91
         Top = 29
-        Width = 99
+        Width = 100
         Items.Strings = (
           'Item A'
           'Item B'
@@ -863,29 +863,30 @@ object F2PDFExForm: TF2PDFExForm
       end
       object SpinEdit1: TSpinEdit
         Left = 38
-        Height = 24
-        Top = 185
-        Width = 49
+        Height = 26
+        Top = 187
+        Width = 50
+        Alignment = taCenter
         ParentFont = False
         TabOrder = 1
         Value = 20
       end
       object FloatSpinEdit1: TFloatSpinEdit
         Left = 38
-        Height = 24
-        Top = 229
-        Width = 49
-        MinValue = 0
+        Height = 26
+        Top = 231
+        Width = 50
+        Alignment = taCenter
         ParentFont = False
         TabOrder = 2
         Value = 9.81
       end
       object FloatSpinEdit2: TFloatSpinEdit
         Left = 38
-        Height = 24
-        Top = 272
-        Width = 49
-        MinValue = 0
+        Height = 26
+        Top = 275
+        Width = 50
+        Alignment = taCenter
         ParentFont = False
         ParentShowHint = False
         ShowHint = True
@@ -894,18 +895,19 @@ object F2PDFExForm: TF2PDFExForm
       end
       object SpinEdit2: TSpinEdit
         Left = 38
-        Height = 24
-        Top = 142
-        Width = 49
+        Height = 26
+        Top = 143
+        Width = 50
+        Alignment = taCenter
         ParentFont = False
         TabOrder = 4
         Value = 10
       end
       object ComboBox1: TComboBox
-        Left = 164
+        Left = 166
         Height = 25
         Top = 16
-        Width = 154
+        Width = 156
         ItemHeight = 17
         Items.Strings = (
           'Item A'
@@ -930,63 +932,63 @@ object F2PDFExForm: TF2PDFExForm
         Text = 'Select Item'
       end
       object SpinEditEx1: TSpinEditEx
-        Left = 164
+        Left = 166
         Height = 25
-        Top = 52
-        Width = 102
+        Top = 53
+        Width = 103
+        Alignment = taCenter
         MaxLength = 0
         ParentFont = False
         TabOrder = 6
         Value = 15
       end
       object SpinEditEx2: TSpinEditEx
-        Left = 164
+        Left = 166
         Height = 25
-        Top = 101
-        Width = 102
+        Top = 102
+        Width = 103
+        Alignment = taCenter
         MaxLength = 0
         ParentFont = False
         TabOrder = 7
         Value = 5
       end
       object FloatSpinEditEx1: TFloatSpinEditEx
-        Left = 164
+        Left = 166
         Height = 25
-        Top = 149
-        Width = 102
+        Top = 151
+        Width = 103
+        Alignment = taCenter
         MaxLength = 0
         ParentFont = False
         TabOrder = 8
-        MinValue = 0
-        NullValue = 0
         Value = 6.67
       end
       object FloatSpinEditEx2: TFloatSpinEditEx
-        Left = 164
+        Left = 166
         Height = 25
-        Top = 198
-        Width = 102
+        Top = 200
+        Width = 103
+        Alignment = taCenter
         MaxLength = 0
         ParentFont = False
         TabOrder = 9
-        MinValue = 0
-        NullValue = 0
         Value = 3.33
       end
       object Label21: TLabel
-        Left = 213
+        Left = 215
         Height = 17
-        Top = 319
+        Top = 322
         Width = 128
         Caption = 'Data Entry Controls'
         ParentColor = False
         ParentFont = False
       end
       object FileNameEdit1: TFileNameEdit
-        Left = 136
+        Left = 137
         Height = 25
-        Top = 237
-        Width = 419
+        Top = 239
+        Width = 423
         FileName = 'FileNameEdit1'
         FilterIndex = 0
         HideDirectories = False
@@ -998,10 +1000,10 @@ object F2PDFExForm: TF2PDFExForm
         Text = 'FileNameEdit1'
       end
       object DirectoryEdit1: TDirectoryEdit
-        Left = 136
+        Left = 137
         Height = 25
-        Top = 278
-        Width = 419
+        Top = 281
+        Width = 423
         Directory = 'DirectoryEdit1'
         ShowHidden = False
         ButtonWidth = 23
@@ -1012,10 +1014,10 @@ object F2PDFExForm: TF2PDFExForm
         Text = 'DirectoryEdit1'
       end
       object ValueListEditor1: TValueListEditor
-        Left = 348
-        Height = 207
+        Left = 352
+        Height = 209
         Top = 16
-        Width = 214
+        Width = 216
         FixedCols = 0
         ParentFont = False
         RowCount = 12
@@ -1034,17 +1036,570 @@ object F2PDFExForm: TF2PDFExForm
           'Key 11=110'
         )
         ColWidths = (
-          63
+          64
           136
         )
+      end
+    end
+    object TabSheet10: TTabSheet
+      Caption = 'Fonts 10'
+      ClientHeight = 346
+      ClientWidth = 589
+      ParentFont = False
+      object Label22: TLabel
+        Left = 27
+        Height = 17
+        Top = 20
+        Width = 222
+        AutoSize = False
+        Caption = 'System font'
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label23: TLabel
+        Left = 27
+        Height = 15
+        Top = 60
+        Width = 222
+        AutoSize = False
+        Caption = 'Arial'
+        Font.Name = 'Arial'
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label24: TLabel
+        Left = 27
+        Height = 15
+        Top = 99
+        Width = 222
+        AutoSize = False
+        Caption = 'Arial Italic'
+        Font.Name = 'Arial'
+        Font.Style = [fsItalic]
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label25: TLabel
+        Left = 27
+        Height = 15
+        Top = 137
+        Width = 222
+        AutoSize = False
+        Caption = 'Arial Bold'
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label26: TLabel
+        Left = 27
+        Height = 15
+        Top = 177
+        Width = 222
+        AutoSize = False
+        Caption = 'Times New Roman'
+        Font.Name = 'Times New Roman'
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label27: TLabel
+        Left = 27
+        Height = 15
+        Top = 216
+        Width = 222
+        AutoSize = False
+        Caption = 'Times New Roman Italic'
+        Font.Name = 'Times New Roman'
+        Font.Style = [fsItalic]
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label28: TLabel
+        Left = 27
+        Height = 15
+        Top = 256
+        Width = 222
+        AutoSize = False
+        Caption = 'Time New Roman Bold'
+        Font.Name = 'Times New Roman'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label29: TLabel
+        Left = 287
+        Height = 17
+        Top = 22
+        Width = 222
+        AutoSize = False
+        Caption = 'Standard sans serif font'
+        Font.Name = 'Sans Serif'
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label30: TLabel
+        Left = 287
+        Height = 17
+        Top = 62
+        Width = 222
+        AutoSize = False
+        Caption = 'Standard sans serif font italic'
+        Font.Name = 'Sans Serif'
+        Font.Style = [fsItalic]
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label31: TLabel
+        Left = 287
+        Height = 17
+        Top = 101
+        Width = 222
+        AutoSize = False
+        Caption = 'Standard sans serif font Bold'
+        Font.Name = 'Sans Serif'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label32: TLabel
+        Left = 287
+        Height = 17
+        Top = 139
+        Width = 222
+        AutoSize = False
+        Caption = 'Standard serif font'
+        Font.Name = 'Serif'
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label33: TLabel
+        Left = 287
+        Height = 17
+        Top = 179
+        Width = 222
+        AutoSize = False
+        Caption = 'Standard serif font Italic'
+        Font.Name = 'Serif'
+        Font.Style = [fsItalic]
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label34: TLabel
+        Left = 287
+        Height = 17
+        Top = 218
+        Width = 222
+        AutoSize = False
+        Caption = 'Standard serif font Bold'
+        Font.Name = 'Serif'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label35: TLabel
+        Left = 287
+        Height = 17
+        Top = 258
+        Width = 222
+        AutoSize = False
+        Caption = 'Some strange font'
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label36: TLabel
+        Left = 243
+        Height = 17
+        Top = 307
+        Width = 117
+        Caption = 'Fonts left justified'
+        ParentColor = False
+        ParentFont = False
+      end
+    end
+    object TabSheet11: TTabSheet
+      Caption = 'Fonts 11'
+      ClientHeight = 344
+      ClientWidth = 583
+      ParentFont = False
+      object Label37: TLabel
+        Left = 24
+        Height = 16
+        Top = 34
+        Width = 222
+        Alignment = taRightJustify
+        AutoSize = False
+        Caption = 'System font'
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label38: TLabel
+        Left = 24
+        Height = 14
+        Top = 71
+        Width = 222
+        Alignment = taRightJustify
+        AutoSize = False
+        Caption = 'Arial'
+        Font.Name = 'Arial'
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label39: TLabel
+        Left = 24
+        Height = 14
+        Top = 105
+        Width = 222
+        Alignment = taRightJustify
+        AutoSize = False
+        Caption = 'Arial Italic'
+        Font.Name = 'Arial'
+        Font.Style = [fsItalic]
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label40: TLabel
+        Left = 24
+        Height = 14
+        Top = 140
+        Width = 222
+        Alignment = taRightJustify
+        AutoSize = False
+        Caption = 'Arial Bold'
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label41: TLabel
+        Left = 24
+        Height = 14
+        Top = 175
+        Width = 222
+        Alignment = taRightJustify
+        AutoSize = False
+        Caption = 'Times New Roman'
+        Font.Name = 'Times New Roman'
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label42: TLabel
+        Left = 24
+        Height = 14
+        Top = 209
+        Width = 222
+        Alignment = taRightJustify
+        AutoSize = False
+        Caption = 'Times New Roman Italic'
+        Font.Name = 'Times New Roman'
+        Font.Style = [fsItalic]
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label43: TLabel
+        Left = 315
+        Height = 17
+        Top = 34
+        Width = 222
+        Alignment = taRightJustify
+        AutoSize = False
+        Caption = 'Standard San Serif Font'
+        Font.Name = 'Sans Serif'
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label44: TLabel
+        Left = 315
+        Height = 17
+        Top = 71
+        Width = 222
+        Alignment = taRightJustify
+        AutoSize = False
+        Caption = 'Standard Sans Serif Font Italic'
+        Font.Name = 'Sans Serif'
+        Font.Style = [fsItalic]
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label45: TLabel
+        Left = 315
+        Height = 17
+        Top = 105
+        Width = 222
+        Alignment = taRightJustify
+        AutoSize = False
+        Caption = 'Standard Sans Serif Font Bold'
+        Font.Name = 'Sans Serif'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label46: TLabel
+        Left = 315
+        Height = 17
+        Top = 140
+        Width = 222
+        Alignment = taRightJustify
+        AutoSize = False
+        Caption = 'Standard Serif Font'
+        Font.Name = 'Serif'
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label47: TLabel
+        Left = 315
+        Height = 17
+        Top = 175
+        Width = 222
+        Alignment = taRightJustify
+        AutoSize = False
+        Caption = 'Standard Serif Font Italic'
+        Font.Name = 'Serif'
+        Font.Style = [fsItalic]
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label48: TLabel
+        Left = 315
+        Height = 17
+        Top = 209
+        Width = 222
+        Alignment = taRightJustify
+        AutoSize = False
+        Caption = 'Standard Serif Font Bold'
+        Font.Name = 'Serif'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label51: TLabel
+        Left = 24
+        Height = 14
+        Top = 244
+        Width = 222
+        Alignment = taRightJustify
+        AutoSize = False
+        Caption = 'Times New Roman Bold'
+        Font.Name = 'Times New Roman'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label52: TLabel
+        Left = 315
+        Height = 17
+        Top = 244
+        Width = 222
+        Alignment = taRightJustify
+        AutoSize = False
+        Caption = 'Some strange font'
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label53: TLabel
+        Left = 259
+        Height = 17
+        Top = 299
+        Width = 126
+        Caption = 'Fonts right justified'
+        ParentColor = False
+        ParentFont = False
+      end
+    end
+    object TabSheet12: TTabSheet
+      Caption = 'Font 12'
+      ClientHeight = 344
+      ClientWidth = 583
+      ParentFont = False
+      object Label49: TLabel
+        Left = 24
+        Height = 16
+        Top = 34
+        Width = 222
+        Alignment = taCenter
+        AutoSize = False
+        Caption = 'System font'
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label50: TLabel
+        Left = 24
+        Height = 14
+        Top = 71
+        Width = 222
+        Alignment = taCenter
+        AutoSize = False
+        Caption = 'Arial'
+        Font.Name = 'Arial'
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label54: TLabel
+        Left = 24
+        Height = 14
+        Top = 105
+        Width = 222
+        Alignment = taCenter
+        AutoSize = False
+        Caption = 'Arial Italic'
+        Font.Name = 'Arial'
+        Font.Style = [fsItalic]
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label55: TLabel
+        Left = 24
+        Height = 14
+        Top = 175
+        Width = 222
+        Alignment = taCenter
+        AutoSize = False
+        Caption = 'Times New Roman'
+        Font.Name = 'Times New Roman'
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label56: TLabel
+        Left = 24
+        Height = 14
+        Top = 140
+        Width = 222
+        Alignment = taCenter
+        AutoSize = False
+        Caption = 'Arial Bold'
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label57: TLabel
+        Left = 24
+        Height = 14
+        Top = 209
+        Width = 222
+        Alignment = taCenter
+        AutoSize = False
+        Caption = 'Times New Roman Italic'
+        Font.Name = 'Times New Roman'
+        Font.Style = [fsItalic]
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label58: TLabel
+        Left = 24
+        Height = 14
+        Top = 244
+        Width = 222
+        Alignment = taCenter
+        AutoSize = False
+        Caption = 'Times New Roman Bold'
+        Font.Name = 'Times New Roman'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label59: TLabel
+        Left = 315
+        Height = 17
+        Top = 34
+        Width = 222
+        Alignment = taCenter
+        AutoSize = False
+        Caption = 'Standard San Serif Font'
+        Font.Name = 'Sans Serif'
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label60: TLabel
+        Left = 315
+        Height = 17
+        Top = 71
+        Width = 222
+        Alignment = taCenter
+        AutoSize = False
+        Caption = 'Standard Sans Serif Font Italic'
+        Font.Name = 'Sans Serif'
+        Font.Style = [fsItalic]
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label61: TLabel
+        Left = 315
+        Height = 17
+        Top = 105
+        Width = 222
+        Alignment = taCenter
+        AutoSize = False
+        Caption = 'Standard Sans Serif Font Bold'
+        Font.Name = 'Sans Serif'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label62: TLabel
+        Left = 315
+        Height = 17
+        Top = 140
+        Width = 222
+        Alignment = taCenter
+        AutoSize = False
+        Caption = 'Standard Serif Font'
+        Font.Name = 'Serif'
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label63: TLabel
+        Left = 315
+        Height = 17
+        Top = 175
+        Width = 222
+        Alignment = taCenter
+        AutoSize = False
+        Caption = 'Standard Serif Font Italic'
+        Font.Name = 'Serif'
+        Font.Style = [fsItalic]
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label64: TLabel
+        Left = 315
+        Height = 17
+        Top = 209
+        Width = 222
+        Alignment = taCenter
+        AutoSize = False
+        Caption = 'Standard Serif Font Bold'
+        Font.Name = 'Serif'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label65: TLabel
+        Left = 315
+        Height = 17
+        Top = 244
+        Width = 222
+        Alignment = taCenter
+        AutoSize = False
+        Caption = 'Some strange font'
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label66: TLabel
+        Left = 259
+        Height = 17
+        Top = 299
+        Width = 97
+        Caption = 'Fonts centered'
+        ParentColor = False
+        ParentFont = False
       end
     end
   end
   object StatusBar: TStatusBar
     Left = 0
     Height = 22
-    Top = 376
-    Width = 587
+    Top = 380
+    Width = 593
     Panels = <>
     ParentFont = False
   end
@@ -1054,15 +1609,13 @@ object F2PDFExForm: TF2PDFExForm
     RandSeed = 840426996
     XCount = 10
     XMax = 10
-    XMin = 0
     YMax = 10
-    YMin = 0
-    left = 512
-    top = 320
+    Left = 517
+    Top = 323
   end
   object MainMenu: TMainMenu
-    left = 16
-    top = 352
+    Left = 16
+    Top = 356
     object miPrintAll: TMenuItem
       Caption = '&Print All'
       OnClick = miPrintAllClick
