@@ -49,7 +49,9 @@ History
           added control and filename checks
 8/7/2020  add functionality to append pages to document, FDoc now global
 13/7/2020 load and use system fonts
-15/7/2020 add text alignment for fonts}
+15/7/2020 add text alignment for labels
+17/7/2020 add text alignment for spinedits
+          add Panel caption}
 
 interface
 
@@ -310,7 +312,7 @@ if cLabel.Visible then
       taRightJustify: DX := ML + cLabel.Left + cLabel.Width
                            - Round(GetFontTextWidth(cLabel.Caption,APage,IDX,fSize));
       end; {of case}
-   DY := MT + cLabel.Top + DH;
+   DY := MT + cLabel.Top + (cLabel.Height + fSize) div 2;
    APage.WriteText(DX,DY,cLabel.Caption);
    end;
 end;
@@ -333,7 +335,7 @@ if cLabel.Visible then
       taRightJustify: DX := ML + cLabel.Left + cLabel.Width
                            - Round(GetFontTextWidth(cLabel.Caption,APage,IDX,fSize));
       end; {of case}
-   DY := MT + cLabel.Top + DH;
+   DY := MT + cLabel.Top + (cLabel.Height + fSize) div 2;
    APage.WriteText(DX,DY,cLabel.Caption);
    end;
 end;
@@ -503,7 +505,7 @@ if cEdit.Visible then
       taRightJustify: DX := ML + cEdit.Left + cEdit.Width - 2
                            - Round(GetFontTextWidth(cEdit.Caption,APage,IDX,fSize));
       end; {of case}
-   DY := MT + cEdit.Top + fSize + (DH - fSize) div 2;
+   DY := MT + cEdit.Top + (DH + fSize) div 2;
    APage.WriteText(DX + 2,DY,cEdit.Caption);
    end;
 end;
