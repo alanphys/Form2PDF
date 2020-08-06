@@ -9,7 +9,7 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="1"/>
         <CursorPos X="3" Y="2"/>
-        <UsageCount Value="166"/>
+        <UsageCount Value="170"/>
         <Loaded Value="True"/>
       </Unit0>
       <Unit1>
@@ -18,9 +18,9 @@
         <ComponentName Value="F2PDFExForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <TopLine Value="160"/>
-        <CursorPos X="15" Y="194"/>
-        <UsageCount Value="166"/>
+        <TopLine Value="208"/>
+        <CursorPos X="44" Y="237"/>
+        <UsageCount Value="170"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit1>
@@ -28,8 +28,8 @@
         <Filename Value="form2pdf.pas"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
-        <TopLine Value="31"/>
-        <CursorPos X="29" Y="54"/>
+        <TopLine Value="28"/>
+        <CursorPos X="39" Y="57"/>
         <ExtraEditorCount Value="1"/>
         <ExtraEditor1>
           <EditorIndex Value="-1"/>
@@ -37,7 +37,7 @@
           <TopLine Value="53"/>
           <CursorPos X="51" Y="66"/>
         </ExtraEditor1>
-        <UsageCount Value="84"/>
+        <UsageCount Value="86"/>
         <Loaded Value="True"/>
       </Unit2>
       <Unit3>
@@ -108,17 +108,17 @@
       <Unit12>
         <Filename Value="/usr/share/fpcsrc/packages/fcl-pdf/src/fppdf.pp"/>
         <UnitName Value="fpPDF"/>
-        <EditorIndex Value="-1"/>
-        <WindowIndex Value="-1"/>
-        <TopLine Value="1009"/>
-        <CursorPos X="3" Y="1016"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="1162"/>
+        <CursorPos X="3" Y="85"/>
         <ExtraEditorCount Value="1"/>
         <ExtraEditor1>
           <EditorIndex Value="-1"/>
           <TopLine Value="5918"/>
           <CursorPos Y="5941"/>
         </ExtraEditor1>
-        <UsageCount Value="40"/>
+        <UsageCount Value="42"/>
+        <Loaded Value="True"/>
       </Unit12>
       <Unit13>
         <Filename Value="/usr/lib64/lazarus/lcl/stdctrls.pp"/>
@@ -221,123 +221,123 @@
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="f2pdfexunit.pas"/>
-        <Caret Line="222" Column="20" TopLine="198"/>
+        <Caret Line="235" Column="20" TopLine="211"/>
       </Position1>
       <Position2>
         <Filename Value="f2pdfexunit.pas"/>
-        <Caret Line="223" Column="20" TopLine="199"/>
+        <Caret Line="234" Column="20" TopLine="210"/>
       </Position2>
       <Position3>
         <Filename Value="f2pdfexunit.pas"/>
-        <Caret Line="224" Column="20" TopLine="200"/>
+        <Caret Line="233" Column="20" TopLine="209"/>
       </Position3>
       <Position4>
         <Filename Value="f2pdfexunit.pas"/>
-        <Caret Line="225" Column="20" TopLine="201"/>
+        <Caret Line="232" Column="20" TopLine="208"/>
       </Position4>
       <Position5>
-        <Filename Value="f2pdfexunit.pas"/>
-        <Caret Line="226" Column="20" TopLine="202"/>
+        <Filename Value="form2pdf.pas"/>
+        <Caret Line="300" Column="21" TopLine="270"/>
       </Position5>
       <Position6>
-        <Filename Value="f2pdfexunit.pas"/>
-        <Caret Line="227" Column="20" TopLine="203"/>
+        <Filename Value="form2pdf.pas"/>
+        <Caret Line="303" Column="40" TopLine="281"/>
       </Position6>
       <Position7>
-        <Filename Value="f2pdfexunit.pas"/>
-        <Caret Line="226" Column="20" TopLine="202"/>
+        <Filename Value="form2pdf.pas"/>
+        <Caret Line="296" Column="68" TopLine="282"/>
       </Position7>
       <Position8>
-        <Filename Value="f2pdfexunit.pas"/>
-        <Caret Line="227" Column="20" TopLine="203"/>
+        <Filename Value="form2pdf.pas"/>
+        <Caret Line="302" Column="78" TopLine="282"/>
       </Position8>
       <Position9>
-        <Filename Value="f2pdfexunit.pas"/>
-        <Caret Line="229" Column="20" TopLine="205"/>
+        <Filename Value="form2pdf.pas"/>
+        <Caret Line="308" Column="67" TopLine="284"/>
       </Position9>
       <Position10>
-        <Filename Value="f2pdfexunit.pas"/>
-        <Caret Line="232" Column="20" TopLine="208"/>
+        <Filename Value="form2pdf.pas"/>
+        <Caret Line="257" Column="21" TopLine="238"/>
       </Position10>
       <Position11>
         <Filename Value="f2pdfexunit.pas"/>
-        <Caret Line="234" Column="20" TopLine="210"/>
+        <Caret Line="218" Column="26" TopLine="14"/>
       </Position11>
       <Position12>
-        <Filename Value="f2pdfexunit.pas"/>
-        <Caret Line="233" Column="20" TopLine="209"/>
+        <Filename Value="form2pdf.pas"/>
+        <Caret Line="483" Column="5" TopLine="461"/>
       </Position12>
       <Position13>
-        <Filename Value="f2pdfexunit.pas"/>
-        <Caret Line="232" Column="20" TopLine="208"/>
+        <Filename Value="form2pdf.pas"/>
+        <Caret Line="526" TopLine="499"/>
       </Position13>
       <Position14>
-        <Filename Value="f2pdfexunit.pas"/>
-        <Caret Line="234" Column="20" TopLine="210"/>
+        <Filename Value="form2pdf.pas"/>
+        <Caret Line="472" TopLine="454"/>
       </Position14>
       <Position15>
-        <Filename Value="f2pdfexunit.pas"/>
-        <Caret Line="235" Column="20" TopLine="211"/>
+        <Filename Value="form2pdf.pas"/>
+        <Caret Line="473" Column="32" TopLine="454"/>
       </Position15>
       <Position16>
-        <Filename Value="f2pdfexunit.pas"/>
-        <Caret Line="234" Column="20" TopLine="210"/>
+        <Filename Value="form2pdf.pas"/>
+        <Caret Line="464" Column="25" TopLine="445"/>
       </Position16>
       <Position17>
-        <Filename Value="f2pdfexunit.pas"/>
-        <Caret Line="233" Column="20" TopLine="209"/>
+        <Filename Value="form2pdf.pas"/>
+        <Caret Line="1269" Column="22" TopLine="1259"/>
       </Position17>
       <Position18>
-        <Filename Value="f2pdfexunit.pas"/>
-        <Caret Line="232" Column="20" TopLine="208"/>
+        <Filename Value="/usr/share/fpcsrc/packages/fcl-pdf/src/fppdf.pp"/>
+        <Caret Line="98" Column="5" TopLine="79"/>
       </Position18>
       <Position19>
-        <Filename Value="form2pdf.pas"/>
-        <Caret Line="300" Column="21" TopLine="270"/>
+        <Filename Value="/usr/share/fpcsrc/packages/fcl-pdf/src/fppdf.pp"/>
+        <Caret Line="91" Column="3" TopLine="79"/>
       </Position19>
       <Position20>
         <Filename Value="form2pdf.pas"/>
-        <Caret Line="303" Column="40" TopLine="281"/>
+        <Caret Line="1129" Column="54" TopLine="1106"/>
       </Position20>
       <Position21>
         <Filename Value="form2pdf.pas"/>
-        <Caret Line="296" Column="68" TopLine="282"/>
+        <Caret Line="1182" TopLine="1157"/>
       </Position21>
       <Position22>
         <Filename Value="form2pdf.pas"/>
-        <Caret Line="302" Column="78" TopLine="282"/>
+        <Caret Line="1280" Column="74" TopLine="1254"/>
       </Position22>
       <Position23>
         <Filename Value="form2pdf.pas"/>
-        <Caret Line="308" Column="67" TopLine="284"/>
+        <Caret Line="158" Column="7" TopLine="139"/>
       </Position23>
       <Position24>
         <Filename Value="form2pdf.pas"/>
-        <Caret Line="257" Column="21" TopLine="238"/>
+        <Caret Line="90" Column="110" TopLine="76"/>
       </Position24>
       <Position25>
-        <Filename Value="f2pdfexunit.pas"/>
-        <Caret Line="218" Column="26" TopLine="14"/>
+        <Filename Value="form2pdf.pas"/>
+        <Caret Line="602" Column="41" TopLine="582"/>
       </Position25>
       <Position26>
         <Filename Value="form2pdf.pas"/>
-        <Caret Line="483" Column="5" TopLine="461"/>
+        <Caret Line="651" Column="41" TopLine="631"/>
       </Position26>
       <Position27>
         <Filename Value="form2pdf.pas"/>
-        <Caret Line="526" TopLine="499"/>
+        <Caret Line="1006" Column="65" TopLine="986"/>
       </Position27>
       <Position28>
         <Filename Value="form2pdf.pas"/>
-        <Caret Line="472" TopLine="454"/>
+        <Caret Line="1282" Column="18" TopLine="1264"/>
       </Position28>
       <Position29>
-        <Filename Value="form2pdf.pas"/>
-        <Caret Line="473" Column="32" TopLine="454"/>
+        <Filename Value="f2pdfexunit.pas"/>
+        <Caret Line="194" Column="15" TopLine="160"/>
       </Position29>
       <Position30>
         <Filename Value="form2pdf.pas"/>
-        <Caret Line="464" Column="25" TopLine="445"/>
+        <Caret Line="854" Column="28" TopLine="832"/>
       </Position30>
     </JumpHistory>
     <RunParams>

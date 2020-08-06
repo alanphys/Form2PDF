@@ -62,11 +62,11 @@ Parse controls and save and close Fdoc. Returns number of objects in FDoc, error
 8/7/2020  add functionality to append pages to document, FDoc now global}
 13/7/2020 load and use system fonts
 15/7/2020 add text alignment for labels
-17/7/2020 add text alignment for spinedits
+17/7/2020 add text alignment for spin edits
           add Panel caption
+5/8/2020  add hide string grid columns
+6/8/2020  fix string grid fixed cols bug
+          add consistent margin schema
 
 6) To Do
 Implement word wrapping on TMemo (seems to be OK for Windows)
-Add separate header margin
-
-                   
