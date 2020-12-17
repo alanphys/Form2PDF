@@ -42,19 +42,21 @@ your uses clause. Any visual control can be passed as a parent eg. TTabControl.
 Licence: Apache v2.0
 
 History
-26/6/2020 Initial commit.
-3/7/2020  Fix bottom margin pagination.
-5/07/2020 (TvS):moved initialization of FormToPDF to initalization part of unit
-6/7/2020  changed FormToPDF to function to return error code
-          added control and filename checks
-8/7/2020  add functionality to append pages to document, FDoc now global
-13/7/2020 load and use system fonts
-15/7/2020 add text alignment for labels
-17/7/2020 add text alignment for spinedits
-          add Panel caption
-5/8/2020  add hide string grid columns
-6/8/2020  fix string grid fixed cols bug
-          add consistent margin schema}
+26/6/2020  Initial commit.
+3/7/2020   Fix bottom margin pagination.
+5/07/2020  (TvS):moved initialization of FormToPDF to initalization part of unit
+6/7/2020   changed FormToPDF to function to return error code
+           added control and filename checks
+8/7/2020   add functionality to append pages to document, FDoc now global
+13/7/2020  load and use system fonts
+15/7/2020  add text alignment for labels
+17/7/2020  add text alignment for spinedits
+           add Panel caption
+5/8/2020   add hide string grid columns
+6/8/2020   fix string grid fixed cols bug
+           add consistent margin schema
+17/12/2020 use rounded rect for smoother appearance
+           fix TStringGrid no columns bug}
 
 interface
 
@@ -158,7 +160,7 @@ DW := AControl.Width;
 DH := DY - (Margins.T + AControl.Top);
 DX := Margins.L + AControl.Left;
 DY := Margins.T + AControl.Top + DH;
-APage.DrawRect(DX,DY,DW,DH,1,false,true);
+APage.DrawRoundedRect(DX,DY,DW,DH,1,1,false,true);
 end;
 
 
@@ -179,7 +181,7 @@ if AControl.Color <> clDefault then
    APage.SetColor(ColorToPDF(AControl.Color),false);
    IsFilled := true;
    end;
-APage.DrawRect(DX,DY,DW,DH,1,IsFilled,true);
+APage.DrawRoundedRect(DX,DY,DW,DH,1,1,IsFilled,true);
 end;
 
 
@@ -850,10 +852,10 @@ if cStrGrd.Visible then
          end;
 
       for J:=cStrGrd.FixedCols to cStrGrd.ColCount - 1 do
-         if cStrGrd.Columns.Items[J - cStrGrd.FixedCols].Visible then
          begin
          {if column headers are defined write these}
-         if (I=0) and (J>0) and (cStrGrd.Columns.Count >= J) and (cStrGrd.FixedRows > 0) then
+         if (I=0) and (J>0) and (cStrGrd.Columns.Count >= J) and (cStrGrd.FixedRows > 0) and
+            cStrGrd.Columns.Items[J - cStrGrd.FixedCols].Visible then
             APage.WriteText(DX,DY,cStrGrd.Columns[J-1].Title.Caption)
            else
             APage.WriteText(DX,DY,cStrGrd.Cells[J,I]);

@@ -774,23 +774,6 @@ object F2PDFExForm: TF2PDFExForm
         Top = 0
         Width = 277
         ColCount = 4
-        Columns = <        
-          item
-            MaxSize = 200
-            Title.Caption = 'First col'
-          end        
-          item
-            MaxSize = 200
-            Title.Caption = 'Second col'
-          end        
-          item
-            MaxSize = 200
-            Title.Caption = 'Third col'
-          end        
-          item
-            MaxSize = 200
-            Title.Caption = 'Fourth col'
-          end>
         FixedCols = 0
         FixedRows = 0
         ParentFont = False
@@ -833,8 +816,8 @@ object F2PDFExForm: TF2PDFExForm
     end
     object TabSheet9: TTabSheet
       Caption = 'Data 9'
-      ClientHeight = 346
-      ClientWidth = 589
+      ClientHeight = 344
+      ClientWidth = 583
       ParentFont = False
       object ListBox1: TListBox
         Left = 37
@@ -868,7 +851,7 @@ object F2PDFExForm: TF2PDFExForm
       end
       object SpinEdit1: TSpinEdit
         Left = 38
-        Height = 26
+        Height = 24
         Top = 185
         Width = 49
         Alignment = taCenter
@@ -878,7 +861,7 @@ object F2PDFExForm: TF2PDFExForm
       end
       object FloatSpinEdit1: TFloatSpinEdit
         Left = 38
-        Height = 26
+        Height = 24
         Top = 229
         Width = 49
         Alignment = taCenter
@@ -888,7 +871,7 @@ object F2PDFExForm: TF2PDFExForm
       end
       object FloatSpinEdit2: TFloatSpinEdit
         Left = 38
-        Height = 26
+        Height = 24
         Top = 272
         Width = 49
         Alignment = taCenter
@@ -900,7 +883,7 @@ object F2PDFExForm: TF2PDFExForm
       end
       object SpinEdit2: TSpinEdit
         Left = 38
-        Height = 26
+        Height = 24
         Top = 142
         Width = 49
         Alignment = taCenter
@@ -1042,14 +1025,14 @@ object F2PDFExForm: TF2PDFExForm
         )
         ColWidths = (
           63
-          149
+          136
         )
       end
     end
     object TabSheet10: TTabSheet
       Caption = 'Fonts 10'
-      ClientHeight = 346
-      ClientWidth = 589
+      ClientHeight = 344
+      ClientWidth = 583
       ParentFont = False
       object Label22: TLabel
         Left = 27
