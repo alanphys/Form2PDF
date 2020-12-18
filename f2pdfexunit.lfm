@@ -805,6 +805,7 @@ object F2PDFExForm: TF2PDFExForm
           item
             MaxSize = 198
             Title.Caption = 'Col C'
+            Visible = False
           end        
           item
             MaxSize = 198
@@ -1025,7 +1026,7 @@ object F2PDFExForm: TF2PDFExForm
         )
         ColWidths = (
           63
-          136
+          149
         )
       end
     end

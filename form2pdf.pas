@@ -56,7 +56,8 @@ History
 6/8/2020   fix string grid fixed cols bug
            add consistent margin schema
 17/12/2020 use rounded rect for smoother appearance
-           fix TStringGrid no columns bug}
+           fix TStringGrid no columns bug
+18/12/2020 fix TStringGrid extend beyond end of control}
 
 interface
 
@@ -852,19 +853,29 @@ if cStrGrd.Visible then
          end;
 
       for J:=cStrGrd.FixedCols to cStrGrd.ColCount - 1 do
-         begin
-         {if column headers are defined write these}
-         if (I=0) and (J>0) and (cStrGrd.Columns.Count >= J) and (cStrGrd.FixedRows > 0) and
-            cStrGrd.Columns.Items[J - cStrGrd.FixedCols].Visible then
-            APage.WriteText(DX,DY,cStrGrd.Columns[J-1].Title.Caption)
+         if (cStrGrd.Columns.Count > 0) then
+            begin
+            if (cStrGrd.Columns[J - cStrGrd.FixedCols].Visible) then
+               begin
+               if I < cStrGrd.FixedRows then
+                  APage.WriteText(DX,DY,cStrGrd.Columns[J - cStrGrd.FixedCols].Title.Caption)
+                 else
+                  APage.WriteText(DX,DY,cStrGrd.Cells[J,I]);
+               DX := DX + cStrGrd.ColWidths[J];
+               end;
+            end
            else
+            begin
             APage.WriteText(DX,DY,cStrGrd.Cells[J,I]);
-         DX := DX + cStrGrd.ColWidths[J];
-         end;
+            DX := DX + cStrGrd.ColWidths[J];
+            end;
+
       DX := Margins.L + cStrGrd.Left + 2;
       DY := DY + cStrGrd.RowHeights[I];
-      if (DY > APage.Paper.Printable.B) or ((DY > Margins.T + cStrGrd.Top + cStrGrd.Height) and fp) then
+      if (DY > APage.Paper.Printable.B) or
+         ((DY > Margins.T + cStrGrd.Top + cStrGrd.Height) and fp) then
          begin
+         if fp then DY := Margins.T + cStrGrd.Top + cStrGrd.Height;
          DrawVarBorder(cStrGrd,APage,DX,DY,Margins);
          APage := SetupPage(cStrGrd,FDoc);
          SetControlFont(cStrGrd,APage,IDX,fsize);
@@ -912,6 +923,7 @@ if cValueList.Visible then
       DY := DY + fSize;
       if (DY > APage.Paper.Printable.B) or ((DY > Margins.T + cValueList.Top + cValueList.Height) and fp) then
          begin
+         if fp then DY := Margins.T + cValueList.Top + cValueList.Height;
          DrawVarBorder(cValueList,APage,DX,DY,Margins);
          APage := SetupPage(cValueList,FDoc);
          SetControlFont(cValueList,APage,IDX,fsize);
