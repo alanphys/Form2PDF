@@ -97,6 +97,9 @@ type
       Label64: TLabel;
       Label65: TLabel;
       Label66: TLabel;
+      Label67: TLabel;
+      Label68: TLabel;
+      Label69: TLabel;
       Label7: TLabel;
       Label8: TLabel;
       Label9: TLabel;
@@ -166,7 +169,6 @@ type
       procedure miPrintActiveClick(Sender: TObject);
       procedure miPrintAllClick(Sender: TObject);
       procedure miPrintSelClick(Sender: TObject);
-      procedure PageControl1Change(Sender: TObject);
    private
 
    public
@@ -238,10 +240,6 @@ if InputQuery('Please select tabs to be printed','Enter the tab numbers delimite
       end;
 end;
 
-procedure TF2PDFExForm.PageControl1Change(Sender: TObject);
-begin
-
-end;
 
 end.
 

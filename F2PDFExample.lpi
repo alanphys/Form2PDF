@@ -59,7 +59,7 @@
       <Filename Value="F2PDFExample"/>
     </Target>
     <SearchPaths>
-      <IncludeFiles Value="$(ProjOutDir);/usr/share/fpcsrc/packages/fcl-pdf/src/"/>
+      <IncludeFiles Value="$(ProjOutDir);$(FPCSrcDir)/packages/fcl-pdf/src"/>
       <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Parsing>

@@ -54,19 +54,26 @@ FormToPDF(AControl:TControl; FileName:string)
 Parse controls and save and close Fdoc. Returns number of objects in FDoc, error code otherwise.
 
 5) History
-26/6/2020 Initial commit.
-3/7/2020  Fix bottom margin pagination.
-5/07/2020 (TvS):moved initialization of FormToPDF to initalization part of unit
-6/7/2020  changed FormToPDF to function to return error code
-          added control and filename checks
-8/7/2020  add functionality to append pages to document, FDoc now global}
-13/7/2020 load and use system fonts
-15/7/2020 add text alignment for labels
-17/7/2020 add text alignment for spin edits
-          add Panel caption
-5/8/2020  add hide string grid columns
-6/8/2020  fix string grid fixed cols bug
-          add consistent margin schema
+26/6/2020  Initial commit.
+3/7/2020   Fix bottom margin pagination.
+5/7/2020   (TvS):moved initialization of FormToPDF to initalization part of unit
+6/7/2020   changed FormToPDF to function to return error code
+           added control and filename checks
+8/7/2020   add functionality to append pages to document, FDoc now global}
+13/7/2020  load and use system fonts
+15/7/2020  add text alignment for labels
+17/7/2020  add text alignment for spin edits
+           add Panel caption
+5/8/2020   add hide string grid columns
+6/8/2020   fix string grid fixed cols bug
+           add consistent margin schema
+           17/12/2020 use rounded rect for smoother appearance
+           fix TStringGrid no columns bug
+18/12/2020 fix TStringGrid extend beyond end of control
+14/6/2021  add TScrollbox
+           fix groupbox (inc radiogroup and checkgroup) item spacing start
+           fix add metadata}
+
 
 6) To Do
 Implement word wrapping on TMemo (seems to be OK for Windows)
