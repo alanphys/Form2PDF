@@ -61,7 +61,9 @@ History
 18/12/2020 fix TStringGrid extend beyond end of control
 14/6/2021  add TScrollbox
            fix groupbox (inc radiogroup and checkgroup) item spacing start
-           fix add metadata}
+           fix add metadata
+17/6/2021  fix off by one on panel and groupbox border
+           add 2 pixel offset to left margin for panel and groupbox borders}
 
 interface
 
@@ -161,8 +163,8 @@ procedure DrawVarBorder(AControl:TControl; APage:TPDFPage; DX,DY:integer; Margin
 {draw rectangle around border}
 var DW,DH      :integer;       {height and width to draw item}
 begin
-DW := AControl.Width;
-DH := DY - (Margins.T + AControl.Top);
+DW := AControl.Width - 1;
+DH := DY - (Margins.T + AControl.Top - 1);
 DX := Margins.L + AControl.Left;
 DY := Margins.T + AControl.Top + DH;
 APage.DrawRoundedRect(DX,DY,DW,DH,1,1,false,true);
@@ -177,8 +179,8 @@ var DX,DY,                     {position of item}
 begin
 IsFilled := false;
 {draw rectangle around border}
-DW := AControl.Width;
-DH := AControl.Height;
+DW := AControl.Width - 1;
+DH := AControl.Height - 1;
 DX := Margins.L + AControl.Left;
 DY := Margins.T + AControl.Top + DH;
 if AControl.Color <> clDefault then
@@ -461,7 +463,7 @@ if cGroupBx.Visible then
    APage.WriteText(DX,DY,cGroupBx.Caption);
 
    {draw components}
-   Margins.L := Margins.L + cGroupBx.Left;
+   Margins.L := DX;
    Margins.T := DY + 2;
    for I:=0 to cGroupBx.ControlCount - 1 do
       ParseControls(cGroupBx.Controls[I],FDoc,APage,IDX,Margins);
@@ -492,7 +494,7 @@ if cPanel.Visible then
    APage.WriteText(DX,DY,cPanel.Caption);
 
    {draw components}
-   Margins.L := Margins.L + cPanel.Left;
+   Margins.L := Margins.L + cPanel.Left + 2;
    Margins.T := Margins.T + cPanel.Top;
    for I:=0 to cPanel.ControlCount - 1 do
       ParseControls(cPanel.Controls[I],FDoc,APage,IDX,Margins);
@@ -1022,7 +1024,7 @@ if cRadioGrp.Visible then
    APage.WriteText(DX,DY,cRadioGrp.Caption);
 
    {draw components}
-   Margins.L := Margins.L + cRadioGrp.Left;
+   Margins.L := DX;
    Margins.T := DY + 2;
    for I:=0 to cRadioGrp.ControlCount - 1 do
       ParseControls(cRadioGrp.Controls[I],FDoc,APage,IDX,Margins);
@@ -1047,7 +1049,7 @@ if cCheckGrp.Visible then
    APage.WriteText(DX,DY,cCheckGrp.Caption);
 
    {draw components}
-   Margins.L := Margins.L + cCheckGrp.Left;
+   Margins.L := DX;
    Margins.T := DY + 2;
    for I:=0 to cCheckGrp.ControlCount - 1 do
       ParseControls(cCheckGrp.Controls[I],FDoc,APage,IDX,Margins);

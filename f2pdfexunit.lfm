@@ -1,7 +1,7 @@
 object F2PDFExForm: TF2PDFExForm
-  Left = 462
+  Left = 460
   Height = 424
-  Top = 181
+  Top = 236
   Width = 593
   Caption = 'Form to PDF Example'
   ClientHeight = 394
@@ -14,25 +14,25 @@ object F2PDFExForm: TF2PDFExForm
     Height = 371
     Top = 0
     Width = 593
-    ActivePage = TabSheet3
+    ActivePage = TabSheet5
     Align = alClient
     ParentFont = False
-    TabIndex = 3
+    TabIndex = 4
     TabOrder = 0
     object TabSheet1: TTabSheet
       Caption = 'Text 1'
-      ClientHeight = 346
+      ClientHeight = 337
       ClientWidth = 589
       ParentFont = False
       object Image: TImage
-        Left = 49
+        Left = 47
         Height = 169
         Top = 32
         Width = 184
         Stretch = True
       end
       object Shape1: TShape
-        Left = 49
+        Left = 47
         Height = 1
         Top = 280
         Width = 201
@@ -45,16 +45,16 @@ object F2PDFExForm: TF2PDFExForm
       end
       object Label1: TLabel
         Left = 56
-        Height = 17
+        Height = 18
         Top = 304
-        Width = 186
+        Width = 173
         Caption = 'This is an example PDF form'
         ParentColor = False
         ParentFont = False
       end
       object Label12: TLabel
         Left = 372
-        Height = 8
+        Height = 9
         Top = 32
         Width = 21
         Caption = 'Minute'
@@ -64,9 +64,9 @@ object F2PDFExForm: TF2PDFExForm
       end
       object Label13: TLabel
         Left = 368
-        Height = 13
+        Height = 14
         Top = 66
-        Width = 28
+        Width = 26
         Caption = 'Small'
         Font.Color = clRed
         Font.Height = 10
@@ -75,9 +75,9 @@ object F2PDFExForm: TF2PDFExForm
       end
       object Label14: TLabel
         Left = 359
-        Height = 15
+        Height = 17
         Top = 110
-        Width = 48
+        Width = 47
         Caption = 'Medium'
         Font.Color = clGreen
         Font.Height = 12
@@ -86,9 +86,9 @@ object F2PDFExForm: TF2PDFExForm
       end
       object Label15: TLabel
         Left = 369
-        Height = 19
+        Height = 23
         Top = 155
-        Width = 26
+        Width = 25
         Caption = 'Big'
         Font.Color = clBlue
         Font.Height = 16
@@ -97,9 +97,9 @@ object F2PDFExForm: TF2PDFExForm
       end
       object Label16: TLabel
         Left = 344
-        Height = 30
+        Height = 35
         Top = 203
-        Width = 83
+        Width = 78
         Caption = 'Bigger'
         Font.Color = clYellow
         Font.Height = 25
@@ -108,9 +108,9 @@ object F2PDFExForm: TF2PDFExForm
       end
       object Label17: TLabel
         Left = 348
-        Height = 38
+        Height = 45
         Top = 261
-        Width = 71
+        Width = 66
         Caption = 'Best'
         Font.Color = clNavy
         Font.Height = 32
@@ -119,7 +119,7 @@ object F2PDFExForm: TF2PDFExForm
       end
       object Edit1: TEdit
         Left = 47
-        Height = 25
+        Height = 32
         Top = 229
         Width = 227
         ParentFont = False
@@ -128,9 +128,9 @@ object F2PDFExForm: TF2PDFExForm
       end
       object StaticText1: TStaticText
         Left = 461
-        Height = 38
+        Height = 45
         Top = 16
-        Width = 71
+        Width = 66
         AutoSize = True
         Caption = 'Best'
         Font.Height = 32
@@ -139,9 +139,9 @@ object F2PDFExForm: TF2PDFExForm
       end
       object StaticText2: TStaticText
         Left = 457
-        Height = 30
+        Height = 35
         Top = 84
-        Width = 79
+        Width = 73
         AutoSize = True
         Caption = 'Better'
         Font.Height = 25
@@ -150,9 +150,9 @@ object F2PDFExForm: TF2PDFExForm
       end
       object StaticText3: TStaticText
         Left = 485
-        Height = 17
+        Height = 20
         Top = 143
-        Width = 23
+        Width = 22
         AutoSize = True
         Caption = 'Big'
         Font.Height = 14
@@ -161,9 +161,9 @@ object F2PDFExForm: TF2PDFExForm
       end
       object StaticText4: TStaticText
         Left = 472
-        Height = 15
+        Height = 17
         Top = 191
-        Width = 48
+        Width = 47
         AutoSize = True
         Caption = 'Medium'
         Font.Height = 12
@@ -172,9 +172,9 @@ object F2PDFExForm: TF2PDFExForm
       end
       object StaticText5: TStaticText
         Left = 482
-        Height = 13
+        Height = 14
         Top = 236
-        Width = 28
+        Width = 26
         AutoSize = True
         Caption = 'Small'
         Font.Height = 10
@@ -183,7 +183,7 @@ object F2PDFExForm: TF2PDFExForm
       end
       object StaticText6: TStaticText
         Left = 486
-        Height = 8
+        Height = 9
         Top = 279
         Width = 21
         AutoSize = True
@@ -430,7 +430,7 @@ object F2PDFExForm: TF2PDFExForm
         end
       end
       object RadioGroup1: TRadioGroup
-        Left = 192
+        Left = 185
         Height = 174
         Top = 0
         Width = 392
@@ -485,7 +485,7 @@ object F2PDFExForm: TF2PDFExForm
         end
       end
       object CheckGroup1: TCheckGroup
-        Left = 192
+        Left = 185
         Height = 152
         Top = 176
         Width = 393
