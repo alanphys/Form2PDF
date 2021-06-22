@@ -7,11 +7,8 @@ uses
    cthreads,
    {$ENDIF}{$ENDIF}
    Interfaces, // this includes the LCL widgetset
-   Forms, tachartlazaruspkg, lazcontrols, printer4lazarus, f2pdfexunit
-   {$IFDEF DEBUG}
-   , SysUtils              //delete SysUtils if not using heaptrc
-   {$ENDIF}
-   { you can add units after this };
+   Forms, tachartlazaruspkg, lazcontrols, datetimectrls,
+   f2pdfexunit;
 
 {$R *.res}
 

@@ -7,7 +7,7 @@ interface
 uses
    Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls,
    ComCtrls, Grids, Menus, Spin, EditBtn, ValEdit, TAGraph, TASources, TASeries,
-   SpinEx;
+   SpinEx, DateTimePicker;
 
 type
 
@@ -25,6 +25,7 @@ type
       CheckBox7: TCheckBox;
       CheckGroup1: TCheckGroup;
       ComboBox1: TComboBox;
+      DateTimePicker1: TDateTimePicker;
       DirectoryEdit1: TDirectoryEdit;
       Edit1: TEdit;
       FileNameEdit1: TFileNameEdit;
@@ -101,6 +102,7 @@ type
       Label68: TLabel;
       Label69: TLabel;
       Label7: TLabel;
+      Label70: TLabel;
       Label8: TLabel;
       Label9: TLabel;
       ListBox1: TListBox;

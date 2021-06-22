@@ -36,6 +36,7 @@ TPanel
 TRadioGroup
 TCheckGroup
 TScrollbox
+TDateTime
 
 To use copy form2pdf.pas into your source directory and include Form2PDF in
 your uses clause. Any visual control can be passed as a parent eg. TTabControl.
@@ -63,7 +64,16 @@ History
            fix groupbox (inc radiogroup and checkgroup) item spacing start
            fix add metadata
 17/6/2021  fix off by one on panel and groupbox border
-           add 2 pixel offset to left margin for panel and groupbox borders}
+           add 2 pixel offset to left margin for panel and groupbox borders
+22/6/2021  add TDateTime
+           add drawing routines and refactor
+           tweak arrows for spin and combo boxes
+           add conditional defines for controls}
+
+{The user must undefine controls which are not used}
+{$DEFINE UseTAChart}
+{$DEFINE UseLazCntrls}
+{$DEFINE UseDTPicker}
 
 interface
 
@@ -79,8 +89,12 @@ function FormToPDF(AControl:TControl; FileName:string):integer; {parse controls 
 
 implementation
 
-uses StdCtrls, ExtCtrls, ComCtrls,TAGraph, Grids, Spin, SpinEx, EditBtn,ValEdit,
-     fpparsettf, fpttf, intfgraphics, StrUtils;
+uses StdCtrls, ExtCtrls, ComCtrls, Grids, Spin, EditBtn,ValEdit,
+     fpparsettf, fpttf, intfgraphics,
+     {$IFDEF UseTAChart}TAGraph, {$ENDIF}
+     {$IFDEF UseLazCntrls}SpinEx, {$ENDIF}
+     {$IFDEF UseDTPicker}DateTimePicker, {$ENDIF}
+     StrUtils;
 
 type TMargins = record
         H,                     {header margin}
@@ -156,39 +170,6 @@ case APen.Style of
    psDashDot:    Result := ppsDashDot;
    psDashDotDot: Result := ppsDashDotDot;
    end; {of case}
-end;
-
-
-procedure DrawVarBorder(AControl:TControl; APage:TPDFPage; DX,DY:integer; Margins:TMargins);
-{draw rectangle around border}
-var DW,DH      :integer;       {height and width to draw item}
-begin
-DW := AControl.Width - 1;
-DH := DY - (Margins.T + AControl.Top - 1);
-DX := Margins.L + AControl.Left;
-DY := Margins.T + AControl.Top + DH;
-APage.DrawRoundedRect(DX,DY,DW,DH,1,1,false,true);
-end;
-
-
-procedure DrawFixedBorder(AControl:TControl; APage:TPDFPage; Margins:TMargins);
-var DX,DY,                     {position of item}
-    DW,DH      :integer;       {height and width to draw item}
-    Isfilled   :boolean;       {is the shape filled}
-
-begin
-IsFilled := false;
-{draw rectangle around border}
-DW := AControl.Width - 1;
-DH := AControl.Height - 1;
-DX := Margins.L + AControl.Left;
-DY := Margins.T + AControl.Top + DH;
-if AControl.Color <> clDefault then
-   begin
-   APage.SetColor(ColorToPDF(AControl.Color),false);
-   IsFilled := true;
-   end;
-APage.DrawRoundedRect(DX,DY,DW,DH,1,1,IsFilled,true);
 end;
 
 
@@ -296,6 +277,98 @@ if IDX >= 0 then
 Result := lWidth;
 end;
 
+
+{------------------------------------------------------------------------------
+Drawing Routines
+------------------------------------------------------------------------------}
+
+procedure DrawVarBorder(CL,CT,CW,CH:integer; APage:TPDFPage; DX,DY:integer; Margins:TMargins);
+{draw rectangle around border}
+var DW,DH      :integer;       {height and width to draw item}
+begin
+DW := CW;
+DH := DY - (Margins.T + CT);
+DX := Margins.L + CL;
+DY := Margins.T + CT + DH;
+APage.DrawRoundedRect(DX,DY,DW,DH,1,1,false,true);
+end;
+
+
+procedure DrawFixedBorder(CL,CT,CW,CH:integer; cColor:TColor; APage:TPDFPage; Margins:TMargins);
+var DX,DY,                     {position of item}
+    DW,DH      :integer;       {height and width to draw item}
+    Isfilled   :boolean;       {is the shape filled}
+
+begin
+IsFilled := false;
+{draw rectangle around border}
+DW := CW;
+DH := CH;
+DX := Margins.L + CL;
+DY := Margins.T + CT + DH;
+if cColor <> clDefault then
+   begin
+   APage.SetColor(ColorToPDF(cColor),false);
+   IsFilled := true;
+   end;
+APage.DrawRoundedRect(DX,DY,DW,DH,1,1,IsFilled,true);
+end;
+
+
+procedure DrawUpDownTick(CL,CT,CW,CH:integer; APage:TPDFPage; Margins:TMargins);
+{Draws up and down ticks at the right end of the control for spin controls.
+   CL                         control position left
+   CT                         control position top
+   CW                         control text width
+   CH                         control text height
+   APage                      PDF page to write on
+   Margins                    page margins}
+
+var X1,X2,                     {position of item}
+    Y1,Y2      :integer;
+begin
+{draw up tick}
+X1 := Margins.L + CL + CW - CH div 2 + 4;
+Y1 := Margins.T + CT + 4;
+X2 := X1 + CH div 4 - 4;
+Y2 := Y1 + CH div 3 - 2;
+APage.DrawLine(X1,Y2,X2,Y1,1,true);
+APage.DrawLine(X1 + CH div 4 - 4,Y1,X2 + CH div 4 - 4,Y2,1,true);
+
+{draw down tick}
+Y1 := Margins.T + CT + CH - 5;
+Y2 := Y1 - CH div 3 + 2;
+APage.DrawLine(X1,Y2,X2,Y1,1,true);
+APage.DrawLine(X1 + CH div 4 - 4,Y1,X2 + CH div 4 - 4,Y2,1,true);
+end;
+
+
+procedure DrawTextJustified(CL,CT,CW,CH:integer; cText:string; Align:TAlignment;
+   APage:TPDFPage; Margins:TMargins; IDX,fSize:integer);
+   {Writes text left, right or centre justified.
+    CL                         control position left
+    CT                         control position top
+    CW                         control text width
+    CH                         control text height
+    cText                      text to write
+    Align                      text justification (taLeftJustify, taCenter, taRightJustify)
+    APage                      PDF page to write on
+    Margins                    page margins
+    IDX                        font index
+    fsize                      font size}
+
+var DX,DY      :integer;      {position of item}
+begin
+case Align of
+   taLeftJustify : DX := Margins.L + CL + 2;
+   taCenter      : DX := Margins.L + CL + Round((CW - GetFontTextWidth(cText,APage,IDX,fSize))/2);
+   taRightJustify: DX := Margins.L + CL + Round(CW - GetFontTextWidth(cText,APage,IDX,fSize) - 2);
+   end; {of case}
+DY := Margins.T + CT + (CH + fSize) div 2;
+APage.WriteText(DX,DY,cText);
+end;
+
+
 {------------------------------------------------------------------------------
 Component Procedures
 ------------------------------------------------------------------------------}
@@ -307,53 +380,40 @@ var fSize,                     {font size}
 
 begin
 SetControlFont(cForm,APage,IDX,fSize);
-DW := Round(GetFontTextWidth(cForm.Caption,APage,IDX,fSize));
-DX := (APage.Paper.W - DW) div 2;                         {fix this to take into account margins}
-DY := Margins.T + (Margins.H - fSize) div 2 + fSize;      {put caption halfway in header}
-APage.SetFont(IDX, fSize);
-APage.SetColor(cForm.Font.Color, false);
-APage.WriteText(DX,DY,cForm.Caption);
+if Margins.H > fSize then
+   begin
+   DW := Round(GetFontTextWidth(cForm.Caption,APage,IDX,fSize));
+   DX := (APage.Paper.W - DW) div 2;                         {fix this to take into account margins}
+   DY := Margins.T + (Margins.H - fSize) div 2 + fSize;      {put caption halfway in header}
+   APage.SetFont(IDX, fSize);
+   APage.SetColor(cForm.Font.Color, false);
+   APage.WriteText(DX,DY,cForm.Caption);
+   end;
 end;
 
 
 {TLabel}
 procedure LabelToPDF(cLabel:TLabel; APage:TPDFPage; IDX:integer; Margins:TMargins);
-var fSize,                     {font size}
-    DX,DY      :integer;       {x and y pos to draw item}
+var fSize      :integer;       {font size}
 begin
 if cLabel.Visible then
    begin
    SetControlFont(cLabel,APage,IDX,fSize);
-   case cLabel.Alignment of
-      taLeftJustify : DX := Margins.L + cLabel.Left;
-      taCenter      : DX := Margins.L + cLabel.Left + Round((cLabel.Width
-                           - GetFontTextWidth(cLabel.Caption,APage,IDX,fSize))/2);
-      taRightJustify: DX := Margins.L + cLabel.Left + cLabel.Width
-                           - Round(GetFontTextWidth(cLabel.Caption,APage,IDX,fSize));
-      end; {of case}
-   DY := Margins.T + cLabel.Top + (cLabel.Height + fSize) div 2;
-   APage.WriteText(DX,DY,cLabel.Caption);
+   with cLabel do
+      DrawTextJustified(Left,Top,Width,Height,Caption,Alignment,APage,Margins,IDX,fSize);
    end;
 end;
 
 
 {TStaticText}
 procedure StaticTextToPDF(cLabel:TStaticText; APage:TPDFPage; IDX:integer; Margins:TMargins);
-var fSize,                     {font size}
-    DX,DY      :integer;       {x and y pos to draw item}
+var fSize      :integer;       {font size}
 begin
 if cLabel.Visible then
    begin
    SetControlFont(cLabel,APage,IDX,fsize);
-   case cLabel.Alignment of
-      taLeftJustify : DX := Margins.L + cLabel.Left;
-      taCenter      : DX := Margins.L + cLabel.Left + Round((cLabel.Width
-                           - GetFontTextWidth(cLabel.Caption,APage,IDX,fSize))/2);
-      taRightJustify: DX := Margins.L + cLabel.Left + cLabel.Width
-                           - Round(GetFontTextWidth(cLabel.Caption,APage,IDX,fSize));
-      end; {of case}
-   DY := Margins.T + cLabel.Top + (cLabel.Height + fSize) div 2;
-   APage.WriteText(DX,DY,cLabel.Caption);
+   with cLabel do
+      DrawTextJustified(Left,Top,Width,Height,Caption,Alignment,APage,Margins,IDX,fSize);
    end;
 end;
 
@@ -383,6 +443,7 @@ if cImage.Visible then
 end;
 
 
+{$IFDEF UseTAChart}
 {TChart}
 procedure ChartToPDF(cChart:TChart; ADoc:TPDFDocument; APage:TPDFPage; Margins:TMargins);
 {for now copy chart to bitmap. use fpVectorial later?}
@@ -410,6 +471,7 @@ if cChart.Visible then
    BitMap.Free;
    end;
 end;
+{$ENDIF}
 
 
 {TShape}
@@ -454,7 +516,7 @@ var I,
 begin
 if cGroupBx.Visible then
    begin
-   DrawFixedBorder(cGroupBx,APage,Margins);
+   with cGroupBx do DrawFixedBorder(left,Top,Width,Height,Color,APage,Margins);
 
    {write groupbox caption}
    SetControlFont(cGroupBx,APage,IDX,fsize);
@@ -474,27 +536,18 @@ end;
 {TPanel}
 procedure PanelToPDF(cPanel:TPanel; FDoc:TPDFDocument; APage:TPDFPage; IDX:integer; Margins:TMargins);
 var I,
-    fSize,                     {font size}
-    DX,DY      :integer;       {x and y pos to draw item}
+    fSize      :integer;       {font size}
 begin
-if cPanel.Visible then
+if cPanel.Visible then with cPanel do
    begin
-   DrawFixedBorder(cPanel,APage,Margins);
+   DrawFixedBorder(Left,Top,Width,Height,Color,APage,Margins);
 
    {write groupbox caption}
    SetControlFont(cPanel,APage,IDX,fsize);
-   case cPanel.Alignment of
-      taLeftJustify : DX := Margins.L + cPanel.Left;
-      taCenter      : DX := Margins.L + cPanel.Left + Round((cPanel.Width
-                           - GetFontTextWidth(cPanel.Caption,APage,IDX,fSize))/2);
-      taRightJustify: DX := Margins.L + cPanel.Left + cPanel.Width - 2
-                           - Round(GetFontTextWidth(cPanel.Caption,APage,IDX,fSize));
-      end; {of case}
-   DY := Margins.T + cPanel.Top + (cPanel.Height + fSize) div 2;
-   APage.WriteText(DX,DY,cPanel.Caption);
+   DrawTextJustified(Left,Top,Width,Height,Caption,Alignment,APage,Margins,IDX,fSize);
 
    {draw components}
-   Margins.L := Margins.L + cPanel.Left + 2;
+   Margins.L := Margins.L + cPanel.Left;
    Margins.T := Margins.T + cPanel.Top;
    for I:=0 to cPanel.ControlCount - 1 do
       ParseControls(cPanel.Controls[I],FDoc,APage,IDX,Margins);
@@ -504,28 +557,18 @@ end;
 
 {TEdit}
 procedure EditToPDF(cEdit:TEdit; APage:TPDFPage; IDX:integer; Margins:TMargins);
-var fSize,                     {font size}
-    DX,DY,                     {x and y pos to draw item}
-    DH         :integer;       {height and width to draw item}
+var fSize:integer;             {font size}
 begin
-if cEdit.Visible then
+if cEdit.Visible then with cEdit do
    begin
-   DrawFixedBorder(cEdit,APage,Margins);
+   DrawFixedBorder(Left,Top,Width,Height,Color,APage,Margins);
 
    {write edit caption}
    SetControlFont(cEdit,APage,IDX,fsize);
-   DH := cEdit.Height;
-   case cEdit.Alignment of
-      taLeftJustify : DX := Margins.L + cEdit.Left;
-      taCenter      : DX := Margins.L + cEdit.Left + Round((cEdit.Width
-                           - GetFontTextWidth(cEdit.Caption,APage,IDX,fSize))/2);
-      taRightJustify: DX := Margins.L + cEdit.Left + cEdit.Width - 2
-                           - Round(GetFontTextWidth(cEdit.Caption,APage,IDX,fSize));
-      end; {of case}
-   DY := Margins.T + cEdit.Top + (DH + fSize) div 2;
-   APage.WriteText(DX + 2,DY,cEdit.Caption);
+   DrawTextJustified(Left,Top,Width,Height,Caption,Alignment,APage,Margins,IDX,fSize);
    end;
 end;
+
 
 {Note: TspinEdit, TFloatSpinEdit, TSpinEditEx and TFloatSpinEditEx are programatically
 the same, but if the -CR compiler switch is set we can only typecast to the exact
@@ -535,48 +578,28 @@ cannot typecast to it.}
 {TCustomFloatSpinEdit}
 procedure CustomFloatSpinEditToPDF(cSpinEd:TCustomFloatSpinEdit; APage:TPDFPage; IDX:integer; Margins:TMargins);
 var fSize,                     {font size}
-    DX,DY,                     {x and y pos to draw item}
     DH,                        {height to draw item}
-    X1,X2,
+    X1,
     Y1,Y2      :integer;
 
 begin
-if cSpinEd.Visible then
+if cSpinEd.Visible then with cSpinEd do
    begin
-   DrawFixedBorder(cSpinEd,APage,Margins);
+   DrawFixedBorder(Left,Top,Width,Height,Color,APage,Margins);
 
    {write edit caption}
    SetControlFont(cSpinEd,APage,IDX,fsize);
    DH := cSpinEd.Height;
-   case cSpinEd.Alignment of
-      taLeftJustify : DX := Margins.L + cSpinEd.Left;
-      taCenter      : DX := Margins.L + cSpinEd.Left + Round((cSpinEd.Width - DH/2
-                         - GetFontTextWidth(cSpinEd.Caption,APage,IDX,fSize))/2);
-      taRightJustify: DX := Margins.L + cSpinEd.Left + cSpinEd.Width  - DH div 2 - 4
-                          - Round(GetFontTextWidth(cSpinEd.Caption,APage,IDX,fSize));
-      end; {of case}
-   DY := Margins.T + cSpinEd.Top + fSize + (DH - fSize) div 2;
-   APage.WriteText(DX + 2,DY,cSpinEd.Caption);
+   DrawTextJustified(Left,Top,Width - DH div 2 - 4,Height,Caption,Alignment,
+      APage,Margins,IDX,fSize);
 
    {draw separator line}
    X1 := Margins.L + cSpinEd.Left + cSpinEd.Width - DH div 2;
    Y1 := Margins.T + cSpinEd.Top;
-   Y2 := Y1 + DH;
+   Y2 := Y1 + DH - 1;
    APage.DrawLine(X1,Y1,X1,Y2,1,true);
 
-   {draw up tick}
-   X1 := Margins.L + cSpinEd.Left + cSpinEd.Width - DH div 2 + 2;
-   Y1 := Margins.T + cSpinEd.Top + 2;
-   X2 := X1 + DH div 4 - 2;
-   Y2 := Y1 + DH div 3 - 2;
-   APage.DrawLine(X1,Y2,X2,Y1,1,true);
-   APage.DrawLine(X1 + DH div 4 - 2,Y1,X2 + DH div 4 - 2,Y2,1,true);
-
-   {draw down tick}
-   Y1 := Margins.T + cSpinEd.Top + DH - 2;
-   Y2 := Y1 - DH div 3 + 2;
-   APage.DrawLine(X1,Y2,X2,Y1,1,true);
-   APage.DrawLine(X1 + DH div 4 - 2,Y1,X2 + DH div 4 - 2,Y2,1,true);
+   DrawUpDownTick(Left,Top,Width,Height, APage, Margins);
    end;
 end;
 
@@ -595,51 +618,32 @@ CustomFloatSpinEditToPDF(TCustomFloatSpinEdit(cSpinEd),APage,IDX,Margins)
 end;
 
 
+{$IFDEF UseLazCntrls}
 {TSpinEditEx}
 procedure SpinEditExToPDF(cSpinEd:TSpinEditEx; APage:TPDFPage; IDX:integer; Margins:TMargins);
 var fSize,                     {font size}
-    DX,DY,                     {x and y pos to draw item}
     DH,                        {height to draw item}
-    X1,X2,
+    X1,
     Y1,Y2      :integer;
 
 begin
-if cSpinEd.Visible then
+if cSpinEd.Visible then with cSpinEd do
    begin
-   DrawFixedBorder(cSpinEd,APage,Margins);
+   DrawFixedBorder(Left,Top,Width,Height,Color,APage,Margins);
 
    {write edit caption}
    SetControlFont(cSpinEd,APage,IDX,fsize);
    DH := cSpinEd.Height;
-   case cSpinEd.Alignment of
-      taLeftJustify : DX := Margins.L + cSpinEd.Left;
-      taCenter      : DX := Margins.L + cSpinEd.Left + Round((cSpinEd.Width - DH/2
-                           - GetFontTextWidth(cSpinEd.Caption,APage,IDX,fSize))/2);
-      taRightJustify: DX := Margins.L + cSpinEd.Left + cSpinEd.Width - DH div 2 - 4
-                           - Round(GetFontTextWidth(cSpinEd.Caption,APage,IDX,fSize));
-      end; {of case}
-   DY := Margins.T + cSpinEd.Top + fSize + (DH - fSize) div 2;
-   APage.WriteText(DX + 2,DY,cSpinEd.Caption);
+   DrawTextJustified(Left,Top,Width - DH div 2 - 4,Height,Caption,Alignment,
+      APage,Margins,IDX,fSize);
 
    {draw separator line}
    X1 := Margins.L + cSpinEd.Left + cSpinEd.Width - DH div 2;
    Y1 := Margins.T + cSpinEd.Top;
-   Y2 := Y1 + DH;
+   Y2 := Y1 + DH - 1;
    APage.DrawLine(X1,Y1,X1,Y2,1,true);
 
-   {draw up tick}
-   X1 := Margins.L + cSpinEd.Left + cSpinEd.Width - DH div 2 + 2;
-   Y1 := Margins.T + cSpinEd.Top + 2;
-   X2 := X1 + DH div 4 - 2;
-   Y2 := Y1 + DH div 3 - 2;
-   APage.DrawLine(X1,Y2,X2,Y1,1,true);
-   APage.DrawLine(X1 + DH div 4 - 2,Y1,X2 + DH div 4 - 2,Y2,1,true);
-
-   {draw down tick}
-   Y1 := Margins.T + cSpinEd.Top +DH - 2;
-   Y2 := Y1 - DH div 3 + 2;
-   APage.DrawLine(X1,Y2,X2,Y1,1,true);
-   APage.DrawLine(X1 + DH div 4 - 2,Y1,X2 + DH div 4 - 2,Y2,1,true);
+   DrawUpDownTick(Left,Top,Width,Height, APage, Margins);
    end;
 end;
 
@@ -647,90 +651,82 @@ end;
 {TFloatSpinEditEx}
 procedure FloatSpinEditExToPDF(cSpinEd:TFloatSpinEditEx; APage:TPDFPage; IDX:integer; Margins:TMargins);
 var fSize,                     {font size}
-    DX,DY,                     {x and y pos to draw item}
     DH,                        {height to draw item}
-    X1,X2,
+    X1,
     Y1,Y2      :integer;
 
 begin
-if cSpinEd.Visible then
+if cSpinEd.Visible then with cSpinEd do
    begin
-   DrawFixedBorder(cSpinEd,APage,Margins);
+   DrawFixedBorder(Left,Top,Width,Height,Color,APage,Margins);
 
    {write edit caption}
    SetControlFont(cSpinEd,APage,IDX,fsize);
    DH := cSpinEd.Height;
-   case cSpinEd.Alignment of
-      taLeftJustify : DX := Margins.L + cSpinEd.Left;
-      taCenter      : DX := Margins.L + cSpinEd.Left + Round((cSpinEd.Width - DH/2
-                           - GetFontTextWidth(cSpinEd.Caption,APage,IDX,fSize))/2);
-      taRightJustify: DX := Margins.L + cSpinEd.Left + cSpinEd.Width  - DH div 2 - 4
-                           - Round(GetFontTextWidth(cSpinEd.Caption,APage,IDX,fSize));
-      end; {of case}
-   DY := Margins.T + cSpinEd.Top + fSize + (DH - fSize) div 2;
-   APage.WriteText(DX + 2,DY,cSpinEd.Caption);
+   DrawTextJustified(Left,Top,Width - DH div 2 - 4,Height,Caption,Alignment,
+      APage,Margins,IDX,fSize);
 
    {draw separator line}
    X1 := Margins.L + cSpinEd.Left + cSpinEd.Width - DH div 2;
    Y1 := Margins.T + cSpinEd.Top;
-   Y2 := Y1 + DH;
+   Y2 := Y1 + DH - 1;
    APage.DrawLine(X1,Y1,X1,Y2,1,true);
 
-   {draw up tick}
-   X1 := Margins.L + cSpinEd.Left + cSpinEd.Width - DH div 2 + 2;
-   Y1 := Margins.T + cSpinEd.Top + 2;
-   X2 := X1 + DH div 4 - 2;
-   Y2 := Y1 + DH div 3 - 2;
-   APage.DrawLine(X1,Y2,X2,Y1,1,true);
-   APage.DrawLine(X1 + DH div 4 - 2,Y1,X2 + DH div 4 - 2,Y2,1,true);
-
-   {draw down tick}
-   Y1 := Margins.T + cSpinEd.Top +DH - 2;
-   Y2 := Y1 - DH div 3 + 2;
-   APage.DrawLine(X1,Y2,X2,Y1,1,true);
-   APage.DrawLine(X1 + DH div 4 - 2,Y1,X2 + DH div 4 - 2,Y2,1,true);
+   DrawUpDownTick(Left,Top,Width,Height, APage, Margins);
    end;
 end;
+{$ENDIF}
 
 
 {TDirectoryEdit}
 procedure DirEditToPDF(cDirEdit:TDirectoryEdit; APage:TPDFPage; IDX:integer; Margins:TMargins);
-var fSize,                     {font size}
-    DX,DY,                     {x and y pos to draw item}
-    DH         :integer;       {height and width to draw item}
+var fSize      :integer;       {font size}
 begin
-if cDirEdit.Visible then
+if cDirEdit.Visible then with cDirEdit do
    begin
-   DrawFixedBorder(cDirEdit,APage,Margins);
-
-   {write edit caption}
+   DrawFixedBorder(Left,Top,Width,Height,Color,APage,Margins);
    SetControlFont(cDirEdit,APage,IDX,fsize);
-   DH := cDirEdit.Height;
-   DX := Margins.L + cDirEdit.Left;
-   DY := Margins.T + cDirEdit.Top + fSize + (DH - fSize) div 2;
-   APage.WriteText(DX + 2,DY,cDirEdit.Caption);
+   DrawTextJustified(Left,Top,Width,Height,Caption,Alignment,APage,Margins,IDX,fSize);
    end;
 end;
 
 
 {TFileNameEdit}
 procedure FileEditToPDF(cFileEdit:TFileNameEdit; APage:TPDFPage; IDX:integer; Margins:TMargins);
+var fSize      :integer;       {font size}
+begin
+if cFileEdit.Visible then with cFileEdit do
+   begin
+   DrawFixedBorder(Left,Top,Width,Height,Color,APage,Margins);
+   SetControlFont(cFileEdit,APage,IDX,fsize);
+   DrawTextJustified(Left,Top,Width,Height,Caption,Alignment,APage,Margins,IDX,fSize);
+   end;
+end;
+
+{$IFDEF UseDTPicker}
+{TDateTimePicker}
+procedure DateTimePickerToPDF(cDTPicker:TDateTimePicker; APage:TPDFPage; IDX:integer; Margins:TMargins);
 var fSize,                     {font size}
     DX,DY,                     {x and y pos to draw item}
     DH         :integer;       {height and width to draw item}
 begin
-if cFileEdit.Visible then
+if cDTPicker.Visible then
    begin
-   DrawFixedBorder(cFileEdit,APage,Margins);
+   with cDTPicker do DrawFixedBorder(Left,Top,Width,Height,Color,APage,Margins);
 
    {write edit caption}
-   SetControlFont(cFileEdit,APage,IDX,fsize);
-   DH := cFileEdit.Height;
-   DX := Margins.L + cFileEdit.Left;
-   DY := Margins.T + cFileEdit.Top + fSize + (DH - fSize) div 2;
-   APage.WriteText(DX + 2,DY,cFileEdit.Caption);
+   SetControlFont(cDTPicker,APage,IDX,fsize);
+   DH := cDTPicker.Height;
+   DX := Margins.L + cDTPicker.Left;
+   DY := Margins.T + cDTPicker.Top + (DH + fSize) div 2;
+   case cDTPicker.Kind of
+      dtkDateTime: APage.WriteText(DX + 2,DY,FormatDateTime('dd/mm/yyyy hh:mm:ss',cDTPicker.DateTime));
+      dtkDate    : APage.WriteText(DX + 2,DY,FormatDateTime('dd/mm/yyyy',cDTPicker.DateTime));
+      dtkTime    : APage.WriteText(DX + 2,DY,FormatDateTime('hh:mm:ss',cDTPicker.DateTime));
+     end;
    end;
 end;
+{$ENDIF}
 
 
 {TComboBox}
@@ -745,7 +741,7 @@ var fSize,                     {font size}
 begin
 if cCmboBx.Visible then
    begin
-   DrawFixedBorder(cCmboBx,APage,Margins);
+   with cCmboBX do DrawFixedBorder(Left,Top,Width,Height,Color,APage,Margins);
 
    {write edit caption}
    SetControlFont(cCmboBx,APage,IDX,fsize);
@@ -756,12 +752,12 @@ if cCmboBx.Visible then
    APage.WriteText(DX + 2,DY,cCmboBx.Caption);
 
    {draw down tick}
-   X1 := DX + DW - DH + 2;
+   X1 := DX + DW - DH + 4;
    Y1 := Margins.T + cCmboBx.Top + 2*DH div 3;
-   X2 := X1 + DH div 2 - 2;
+   X2 := X1 + DH div 2 - 4;
    Y2 := Y1 - DH div 3 + 2;
    APage.DrawLine(X1,Y2,X2,Y1,1,true);
-   APage.DrawLine(X1 + DH div 2 - 2,Y1,X2 + DH div 2 - 2,Y2,1,true);
+   APage.DrawLine(X1 + DH div 2 - 4,Y1,X2 + DH div 2 - 4,Y2,1,true);
    end;
 end;
 
@@ -787,14 +783,14 @@ if cMemo.Visible then
       DY := DY + fSize;
       if (DY > APage.Paper.Printable.B) or ((DY > Margins.T + cMemo.Top + cMemo.Height) and fp) then
          begin
-         DrawVarBorder(cMemo,APage,DX,DY,Margins);
+         with cMemo do DrawVarBorder(Left,Top,Width,Height,APage,DX,DY,Margins);
          APage := SetupPage(cMemo,FDoc);
          SetControlFont(cMemo,APage,IDX,fsize);
          DY := Margins.T + fsize + 2;
          fp := false;
          end;
       end;
-   DrawVarBorder(cMemo,APage,DX,DY,Margins);
+   with cMemo do DrawVarBorder(Left,Top,Width,Height,APage,DX,DY,Margins);
    end;
 end;
 
@@ -819,7 +815,7 @@ if cLstBx.Visible then
       DY := DY + fSize;
       if (DY > APage.Paper.Printable.B) or ((DY > Margins.T + cLstBx.Top + cLstBx.Height) and fp) then
          begin
-         DrawVarBorder(cLstBx,APage,DX,DY,Margins);
+         with clstBx do DrawVarBorder(Left,Top,Width,Height,APage,DX,DY,Margins);
          APage := SetupPage(cLstBx,FDoc);
          SetControlFont(cLstBx,APage,IDX,fsize);
          DY := Margins.T + cLstBx.Top + fsize + 2;
@@ -827,7 +823,7 @@ if cLstBx.Visible then
          end;
       end;
 
-   DrawVarBorder(cLstBx,APage,DX,DY,Margins);
+   with cLstBx do DrawVarBorder(Left,Top,Width,Height,APage,DX,DY,Margins);
    end;
 end;
 
@@ -878,14 +874,14 @@ if cStrGrd.Visible then
          ((DY > Margins.T + cStrGrd.Top + cStrGrd.Height) and fp) then
          begin
          if fp then DY := Margins.T + cStrGrd.Top + cStrGrd.Height;
-         DrawVarBorder(cStrGrd,APage,DX,DY,Margins);
+         with CStrGrd do DrawVarBorder(Left,Top,Width,Height,APage,DX,DY,Margins);
          APage := SetupPage(cStrGrd,FDoc);
          SetControlFont(cStrGrd,APage,IDX,fsize);
          DY := Margins.T + cStrGrd.Top + fsize + 2;
          fp := false;
          end;
       end;
-   DrawVarBorder(cStrGrd,APage,DX,DY,Margins);
+   with cStrGrd do DrawVarBorder(Left,Top,Width,Height,APage,DX,DY,Margins);
    end;
 end;
 
@@ -926,7 +922,7 @@ if cValueList.Visible then
       if (DY > APage.Paper.Printable.B) or ((DY > Margins.T + cValueList.Top + cValueList.Height) and fp) then
          begin
          if fp then DY := Margins.T + cValueList.Top + cValueList.Height;
-         DrawVarBorder(cValueList,APage,DX,DY,Margins);
+         with cValueList do DrawVarBorder(Left,Top,Width,Height,APage,DX,DY,Margins);
          APage := SetupPage(cValueList,FDoc);
          SetControlFont(cValueList,APage,IDX,fsize);
          DY := Margins.T + cValueList.Top + fsize + 2;
@@ -934,7 +930,7 @@ if cValueList.Visible then
          end;
       end;
 
-   DrawVarBorder(cValueList,APage,DX,DY,Margins);
+   with cValueList do DrawVarBorder(Left,Top,Width,Height,APage,DX,DY,Margins);
    end;
 end;
 
@@ -1015,7 +1011,7 @@ var I,
 begin
 if cRadioGrp.Visible then
    begin
-   DrawFixedBorder(cRadioGrp,APage,Margins);
+   with cRadioGrp do DrawFixedBorder(Left,Top,Width,Height,Color,APage,Margins);
 
    {write caption}
    SetControlFont(cRadioGrp,APage,IDX,fsize);
@@ -1040,7 +1036,7 @@ var I,
 begin
 if cCheckGrp.Visible then
    begin
-   DrawFixedBorder(cCheckGrp,APage,Margins);
+   with cCheckGrp do DrawFixedBorder(Left,Top,Width,Height,Color,APage,Margins);
 
    {write caption}
    SetControlFont(cCheckGrp,APage,IDX,fsize);
@@ -1092,17 +1088,24 @@ if AControl is TFloatSpinEdit then        {TFloatSpinEdit}
 if AControl is TSpinEdit then             {TSpinEdit}
    SpinEditToPDF(TSpinEdit(AControl),Page,ftText,Margins);
 
+{$IFDEF UseLazCntrls}
 if AControl is TSpinEditEx then           {TSpinEditEx}
    SpinEditExToPDF(TSpinEditEx(AControl),Page,ftText,Margins);
 
 if AControl is TFloatSpinEditEx then      {TFloatSpinEditEx}
    FloatSpinEditExToPDF(TFloatSpinEditEx(AControl),Page,ftText,Margins);
+{$ENDIF}
 
 if AControl is TDirectoryEdit then        {TDirectoryEdit}
    DirEditToPDF(TDirectoryEdit(AControl),Page,ftText,Margins);
 
 if AControl is TFileNameEdit then         {TFileNameEdit}
    FileEditToPDF(TFileNameEdit(AControl),Page,ftText,Margins);
+
+{$IFDEF UseDTPicker}
+if AControl is TDateTimePicker then       {TDateTimePicker}
+   DateTimePickerToPDF(TDateTimePicker(AControl),Page,ftText,Margins);
+{$ENDIF}
 
 if AControl is TComboBox then             {TComboBox}
    ComboBoxToPDF(TComboBox(AControl),Page,ftText,Margins);
@@ -1128,8 +1131,10 @@ if AControl is TRadioButton then          {TRadioButton}
 if AControl is TImage then                {TImage}
    ImageToPDF(TImage(AControl),FDoc,Page,Margins);
 
+{$IFDEF UseTAChart}
 if AControl is TChart then                {TChart}
    ChartToPDF(TChart(AControl),FDoc,Page,Margins);
+{$ENDIF}
 
 if AControl is TShape then                {TShape}
    ShapeToPDF(TShape(AControl),Page,Margins);
@@ -1265,10 +1270,10 @@ if FontsAvailable then Result := 0;
 if (Result = 0) then
    begin
    {set margins}
-   Margins.T := 72;                       {1 inch}
-   Margins.L := 72;                       {1 inch}
-   Margins.B := 72;                       {1 inch}
-   Margins.R := 72;                       {1 inch}
+   Margins.T := 36;                       {1/2 inch}
+   Margins.L := 36;                       {1/2 inch}
+   Margins.B := 36;                       {1/2 inch}
+   Margins.R := 36;                       {1/2 inch}
    Margins.H := 36;                       {1/2 inch}
    Margins.F := 0;                        {nothing}
 

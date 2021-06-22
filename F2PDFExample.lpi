@@ -27,7 +27,7 @@
     </RunParams>
     <RequiredPackages Count="4">
       <Item1>
-        <PackageName Value="Printer4Lazarus"/>
+        <PackageName Value="DateTimeCtrls"/>
       </Item1>
       <Item2>
         <PackageName Value="LazControls"/>

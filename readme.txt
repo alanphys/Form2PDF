@@ -1,4 +1,4 @@
-Form2PDF (c) AC Chamberlain Copyright 2020
+Form2PDF (c) AC Chamberlain Copyright 2021
 
 1) Introduction
 This unit renders (very crudely) the text and image components of a form to a PDF using the fcl-pdf package. The object is not to provide a pixel by pixel representation of the form, but to record the text and image information. Multiline controls such as TStringGrid and TMemo are printed out in their entirety. The unit is modularised so new components can be added easily. 
@@ -37,6 +37,8 @@ TGroupBox
 TPanel
 TRadioGroup
 TCheckGroup
+TScrollbox
+TDateTime
 
 4) Usage
 To use copy form2pdf.pas into your source directory and include Form2PDF in your uses clause. You will need to add the path to the fcl-pdf source so the standard font metrics file can be included. Any visual control can be passed as a parent eg. TTabSheet or TForm.
@@ -72,8 +74,13 @@ Parse controls and save and close Fdoc. Returns number of objects in FDoc, error
 18/12/2020 fix TStringGrid extend beyond end of control
 14/6/2021  add TScrollbox
            fix groupbox (inc radiogroup and checkgroup) item spacing start
-           fix add metadata}
-
+           fix add metadata
+17/6/2021  fix off by one on panel and groupbox border
+           add 2 pixel offset to left margin for panel and groupbox borders
+22/6/2021  add TDateTime
+           add drawing routines and refactor
+           tweak arrows for spin and combo boxes
+           add conditional defines for controls
 
 6) To Do
 Implement word wrapping on TMemo (seems to be OK for Windows)
