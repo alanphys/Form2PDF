@@ -208,6 +208,8 @@ end;
 
 procedure TF2PDFExForm.miPrintActiveClick(Sender: TObject);
 begin
+FormToPDF;
+FDoc.SetMargins(0,0,36,36,36,36);
 StatusBar.SimpleText := IntToStr(FormToPDF(PageControl1.ActivePage,'test.pdf'))
    + ' objects printed'
 end;
@@ -231,6 +233,8 @@ ObjectCount := 0;
 if InputQuery('Please select tabs to be printed','Enter the tab numbers delimited by commas',
    sTabs) then
    try
+   FormToPDF;
+   FDoc.SetMargins(0,36,36,36,36,36);
    while sTabs <> '' do
       begin
       TabIndex := StrToInt(Copy2SymbDel(sTabs,',')) - 1;

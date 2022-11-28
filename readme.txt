@@ -1,7 +1,7 @@
-Form2PDF (c) AC Chamberlain Copyright 2021
+Form2PDF (c) AC Chamberlain Copyright 2020-2022
 
 1) Introduction
-This unit renders (very crudely) the text and image components of a form to a PDF using the fcl-pdf package. The object is not to provide a pixel by pixel representation of the form, but to record the text and image information. Multiline controls such as TStringGrid and TMemo are printed out in their entirety. The unit is modularised so new components can be added easily. 
+This unit renders (very crudely) the text and image components of a form to a PDF using the fcl-pdf package. The object is not to provide a pixel by pixel representation of the form, but to record the text and image information. Multiline controls such as TStringGrid and TMemo are printed out in their entirety. The unit is modularised so new components can be added easily. Written for Free Pascal and Lazarus.
 
 2) Licence
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -81,6 +81,8 @@ Parse controls and save and close Fdoc. Returns number of objects in FDoc, error
            add drawing routines and refactor
            tweak arrows for spin and combo boxes
            add conditional defines for controls
+28/11/2022 derive TForm2PDFDoc class and add definable margins in FDOC
+           print TabSheet caption in footer
 
 6) To Do
 Implement word wrapping on TMemo (seems to be OK for Windows)

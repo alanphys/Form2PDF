@@ -68,7 +68,9 @@ History
 22/6/2021  add TDateTime
            add drawing routines and refactor
            tweak arrows for spin and combo boxes
-           add conditional defines for controls}
+           add conditional defines for controls
+28/11/2022 derive TForm2PDFDoc class and add definable margins in FDOC
+           print TabSheet caption in footer}
 
 {The user must undefine controls which are not used}
 {$DEFINE UseTAChart}
@@ -80,7 +82,25 @@ interface
 uses
    Classes, Forms, Graphics, Controls, SysUtils, fppdf;
 
-var FDoc       :TPDFDocument;  {declare FDOC global so it can be accessed by caller}
+type TMargins = record
+        H,                     {header margin}
+        F,                     {footer margin}
+        T,                     {top margin}
+        B,                     {bottom margin}
+        L,                     {left margin}
+        R      :integer;       {right margin}
+       end;
+
+     TForm2PDFDoc = class(TPDFDocument)
+        private
+           fMargins:TMargins;
+        public
+           procedure SetMargins(aH,aF,aT,aB,aL,aR:integer);
+           constructor Create(AOwner : TComponent);
+           property Margins:TMargins read fMargins write fMargins;
+        end;
+
+var FDoc       :TForm2PDFDoc;  {declare FDOC global so it can be accessed by caller}
 
 function FormToPDF:integer;                     {initialise FDoc and check if fonts are available}
 function FormToPDF(AControl: TControl):integer; {parse controls and append pages to Fdoc}
@@ -96,15 +116,6 @@ uses StdCtrls, ExtCtrls, ComCtrls, Grids, Spin, EditBtn,ValEdit,
      {$IFDEF UseDTPicker}DateTimePicker, {$ENDIF}
      StrUtils;
 
-type TMargins = record
-        H,                     {header margin}
-        F,                     {footer margin}
-        T,                     {top margin}
-        B,                     {bottom margin}
-        L,                     {left margin}
-        R      :integer;       {right margin}
-       end;
-
 {Set Include files in "Project Options, Paths" to include
 /usr/share/fpcsrc/packages/fcl-pdf/src for linux and
 C:\lazarus\fpc\3.0.4\source\packages\fcl-pdf\src for windows
@@ -116,6 +127,32 @@ procedure ParseControls(AControl:TControl; FDoc:TPDFDocument; Page:TPDFPage; ftT
 
 var FirstPage  :boolean;
     CustomPaper:TPDFPaper;
+
+{------------------------------------------------------------------------------
+TForm2PDFDoc
+------------------------------------------------------------------------------}
+constructor TForm2PDFDoc.Create(AOwner : TComponent);
+begin
+inherited Create(AOwner);
+SetMargins(36,36,36,36,36,36)
+end;
+
+
+procedure TForm2PDFDoc.SetMargins(aH,aF,aT,aB,aL,aR:integer);
+begin
+if aH < 0 then aH := 0;
+fMargins.H := aH;
+if aF < 0 then aF := 0;
+fMargins.F := aF;
+if aT < 0 then aT := 0;
+fMargins.T := aT;
+if aB < 0 then aB := 0;
+fMargins.B := aB;
+if aL < 0 then aL := 0;
+fMargins.L := aL;
+if aR < 0 then aR := 0;
+fMargins.R := aR;
+end;
 
 {------------------------------------------------------------------------------
 Page and Document set up
@@ -1054,7 +1091,10 @@ end;
 
 
 procedure TabSheetToPDF(cTabSht:TTabSheet; FDoc:TPDFDocument; APage:TPDFPage; IDX:integer; Margins:TMargins);
-var I          :integer;
+var I,
+    fSize,                     {font size}
+    DX,DY,                     {x and y pos to draw item}
+    DW         :integer;       {height and width to draw item}
 begin
 if cTabSht.TabVisible then
    begin
@@ -1062,6 +1102,16 @@ if cTabSht.TabVisible then
       else FirstPage := false;
    for I:=0 to cTabSht.ControlCount - 1 do
       ParseControls(cTabSht.Controls[I],FDoc,APage,IDX,Margins);
+   SetControlFont(cTabSht,APage,IDX,fsize);
+   if Margins.F > fSize then
+      begin
+      DW := Round(GetFontTextWidth(cTabSht.Caption,APage,IDX,fSize));
+      DX := (APage.Paper.W - DW) div 2;                         {fix this to take into account margins}
+      DY := APage.Paper.H - Margins.B - (Margins.F - fSize) div 2 - fSize;      {put caption halfway in footer}
+      APage.SetFont(IDX, fSize);
+      APage.SetColor(cTabSht.Font.Color, false);
+      APage.WriteText(DX,DY,cTabSht.Caption);
+      end;
    end;
 end;
 
@@ -1275,13 +1325,13 @@ if (Result = 0) then
    Margins.B := 36;                       {1/2 inch}
    Margins.R := 36;                       {1/2 inch}
    Margins.H := 36;                       {1/2 inch}
-   Margins.F := 0;                        {nothing}
+   Margins.F := 36;                       {1/2 inch}
 
    if not Assigned(FDoc) then
       begin
       {Set up document}
       try
-         FDoc := TPDFDocument.Create(Nil);
+         FDoc := TForm2PDFDoc.Create(Nil);
       except
          Result := -2;
       end;
@@ -1319,6 +1369,14 @@ if (Result = 0) then
          FDoc.DefaultOrientation := ppoLandscape
         else
          FDoc.DefaultOrientation := ppoPortrait;
+
+      {set margins}
+      Margins.T := FDoc.Margins.T;
+      Margins.L := FDoc.Margins.L;
+      Margins.B := FDoc.Margins.B;
+      Margins.R := FDoc.Margins.R;
+      Margins.H := FDoc.Margins.H;
+      Margins.F := FDoc.Margins.F;
 
       {set paper size, smaller than A4 use A4 otherwise use custom as nothing larger}
       CustomPaper.H := DH + Margins.T + Margins.B + Margins.H + Margins.F;
